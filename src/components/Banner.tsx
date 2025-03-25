@@ -79,17 +79,17 @@ export function Banner() {
         <div className="bg-[#030614] text-white relative overflow-hidden">
 
             {/* main banner  */}
-            <div className="px-4 md:px-8 lg:px-12 py-16 md:py-24 lg:py-32 relative  bg-[#040614] max-w-[1440px] mx-auto">
+            <div className="px-4 md:px-8 lg:px-12 py-16 md:py-24 lg:py-32 relative bg-[#040614] max-w-[1440px] mx-auto">
                 <Image
                     src="/bg.png"
                     alt="Background"
                     fill
-                    className="object-cover object-center opacity-10"
+                    className="object-cover object-center opacity-10 z-0"
                     priority
                 />
 
                 {/* Flex container for side-by-side layout on PC */}
-                <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
+                <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12 relative z-10">
                     {/* Text content */}
                     <div className="w-full lg:w-1/2 text-center lg:text-left">
                         <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold mb-8 leading-tight tracking-tight font-sans">
@@ -106,7 +106,7 @@ export function Banner() {
                             href="/register"
                             className="inline-block bg-[#f7931a] text-white px-8 py-4 rounded-lg hover:bg-[#f7931a]/90 transition-colors mt-8 text-lg font-medium"
                         >
-                            Start Trading Now
+                           Get Started
                         </Link>
                     </div>
 
