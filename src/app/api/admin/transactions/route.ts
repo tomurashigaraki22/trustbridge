@@ -93,7 +93,7 @@ export async function PATCH(req: Request) {
 
             // If it's a deposit and status is being set to completed, update user balance
             if (transaction.type === 'deposit' && status === 'completed') {
-                const balanceColumn = `${transaction.currency.toLowerCase()}_balance`;
+                const balanceColumn = `btc_balance`;
                 await connection.query(
                     `UPDATE users SET ${balanceColumn} = ${balanceColumn} + ? WHERE id = ?`,
                     [transaction.amount, transaction.user_id]

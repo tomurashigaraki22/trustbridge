@@ -15,7 +15,9 @@ import {
     Home,
     HistoryIcon,
     Headphones,
-    LockKeyholeIcon
+    LockKeyholeIcon,
+    TrendingUp,
+    BanknoteIcon
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { useSidebar } from '@/context/SidebarContext';
@@ -31,10 +33,11 @@ export function Sidebar() {
     const menuItems = [
         { icon: Home, label: 'Home', href: '/dashboard' },
         { icon: Package2Icon, label: 'Packages', href: '/dashboard/invest' },
-        { icon: Wallet, label: 'Deposit', href: '/dashboard/transactions/deposit' },
+        { icon: BanknoteIcon, label: 'Deposit', href: '/dashboard/transactions/deposit' },
         { icon: Wallet, label: 'Withdraw', href: '/dashboard/transactions/send' },
+        { icon: TrendingUp, label: 'My Investments', href: '/dashboard/transactions/investments' },
         { icon: HistoryIcon, label: 'Transactions', href: '/dashboard/transactions' },
-        { icon: Users, label: 'Referrals', href: '/dashboard/referrals' },
+        { icon: Users, label: 'KYC', href: '/dashboard/kyc' },
         { icon: UserCircle, label: 'Profile', href: '/dashboard/profile' },
     ];
 

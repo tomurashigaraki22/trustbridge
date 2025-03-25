@@ -96,7 +96,6 @@ export async function GET(req: Request) {
                 updated_at,
                 is_admin
             FROM users 
-            WHERE is_admin = 0
             ORDER BY created_at DESC
         `);
 

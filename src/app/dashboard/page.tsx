@@ -172,9 +172,7 @@ export default function DashboardPage() {
                         : "$••••••••••"
                     )}
                   </div>
-                  {/* <div className="text-sm text-[#00C805] mt-1">
-                    Up by $0.00 since you began investing
-                  </div> */}
+                
                 </div>
               </div>
 

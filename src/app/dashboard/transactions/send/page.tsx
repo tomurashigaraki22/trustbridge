@@ -41,7 +41,7 @@ export default function SendPage({ searchParams }: { searchParams: Promise<{ sym
                     gasFee: Number((1 / Number(priceUsd || 1)).toFixed(8)),
                 }
             })
-            .filter((coin) => coin.balance > 0)
+            .filter((coin) => coin.name == "BTC" || coin.name == "USDT" )
     }, [userData, cryptoData])
 
     const [selectedCrypto, setSelectedCrypto] = useState(
@@ -66,18 +66,57 @@ export default function SendPage({ searchParams }: { searchParams: Promise<{ sym
     )
 
     // Update the total calculation
-    const gasPrice = selectedCrypto ? `${selectedCrypto.gasFee} ${selectedCrypto.symbol}` : "0"
+    const gasPrice = selectedCrypto && amount 
+        ? `${(Number(amount) * 0.01).toFixed(8)} ${selectedCrypto.symbol}` 
+        : "0"
+    const gasFeeAmount = Number(amount) * 0.01
     const total =
         selectedCrypto && cryptoAmount
-            ? `${(cryptoAmount + selectedCrypto.gasFee).toFixed(8)} ${selectedCrypto.symbol}`
+            ? `${(cryptoAmount + gasFeeAmount).toFixed(8)} ${selectedCrypto.symbol}`
             : "0"
     const totalUsd = selectedCrypto && cryptoAmount
-        ? `${((cryptoAmount + selectedCrypto.gasFee) * selectedCrypto.priceUsd).toFixed(2)}`
+        ? `${((Number(amount) + gasFeeAmount)).toFixed(2)}`
         : "0.00"
 
 
 
 
+ 
+    // Add these new types after the imports
+    type WithdrawalType = 'bank' | 'paypal' | 'cashapp' | 'zelle' | 'usdt' | 'ethereum' | 'bitcoin';
+
+    interface BankDetails {
+        bankName: string;
+        accountNumber: string;
+        routingNumber: string;
+        accountName: string;
+    }
+
+    // Add these new states in the component
+    const [withdrawalType, setWithdrawalType] = useState<WithdrawalType>('bitcoin')
+    const [bankDetails, setBankDetails] = useState<BankDetails>({
+        bankName: '',
+        accountNumber: '',
+        routingNumber: '',
+        accountName: ''
+    })
+
+    // Add this function to format the address based on withdrawal type
+    // Modify the formatAddress function
+        const formatAddress = () => {
+            switch (withdrawalType) {
+                case 'bank':
+                    return JSON.stringify(bankDetails);  // Convert bank details to JSON string
+                case 'paypal':
+                case 'cashapp':
+                case 'zelle':
+                    return address;
+                default:
+                    return address;
+            }
+        }
+    
+    // The rest of the handleSubmit function remains the same
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setError("")
@@ -89,7 +128,7 @@ export default function SendPage({ searchParams }: { searchParams: Promise<{ sym
             return
         }
 
-        const totalAmount = cryptoAmount + selectedCrypto.gasFee
+        const totalAmount = cryptoAmount + gasFeeAmount  // Use the new gas fee amount
         if (totalAmount > selectedCrypto.balance) {
             setError(`Insufficient ${selectedCrypto.symbol} balance`)
             toast.error(`Insufficient ${selectedCrypto.symbol} balance`)
@@ -108,9 +147,10 @@ export default function SendPage({ searchParams }: { searchParams: Promise<{ sym
                 body: JSON.stringify({
                     amount: totalUsd,
                     currency: selectedCrypto.symbol,
-                    address: address,
-                    gasFee: selectedCrypto.gasFee,
-                    totalUsd: (totalUsd)
+                    address: formatAddress(),
+                    gasFee: gasFeeAmount,   
+                    totalUsd: (totalUsd),
+                    withdrawalType: withdrawalType
                 }),
             })
 
@@ -173,7 +213,7 @@ export default function SendPage({ searchParams }: { searchParams: Promise<{ sym
 
     return (
         <div className="min-h-screen bg-[#111111] text-white pb-[5rem]">
-            <Toaster /> 
+            <Toaster />
             <div className="flex flex-col lg:flex-row">
                 <Sidebar />
                 <div className="flex-1 ">
@@ -192,7 +232,7 @@ export default function SendPage({ searchParams }: { searchParams: Promise<{ sym
                                             </div>
                                         )}
                                         <div className="flex items-center justify-between mb-6">
-                                            <h2 className="text-2xl font-bold">Send {selectedCrypto?.name}</h2>
+                                            <h2 className="text-2xl font-bold">Withdraw</h2>
                                             <select
                                                 value={selectedCrypto?.symbol}
                                                 onChange={(event) => {
@@ -204,7 +244,7 @@ export default function SendPage({ searchParams }: { searchParams: Promise<{ sym
                                             >
                                                 {availableCoins.map((crypto) => (
                                                     <option key={crypto.symbol} value={crypto.symbol}>
-                                                        {crypto.symbol} ($
+                                                        {crypto.symbol == "BTC" ? 'Main Balance' : 'Bonus Balance' } ($
                                                         {(crypto.balance).toLocaleString("en-US", {
                                                             minimumFractionDigits: 2,
                                                             maximumFractionDigits: 2,
@@ -218,22 +258,7 @@ export default function SendPage({ searchParams }: { searchParams: Promise<{ sym
                                             <div>
                                                 <div className="flex items-center justify-between mb-2">
                                                     <label className="text-sm text-gray-400">Amount</label>
-                                                    <div className="flex items-center gap-2 bg-[#1A1A1A] rounded-lg p-1">
-                                                        <button
-                                                            type="button"
-                                                            onClick={() => setIsUSD(false)}
-                                                            className={`px-3 py-1 rounded text-sm ${!isUSD ? "bg-orange-500" : "hover:bg-[#242424]"}`}
-                                                        >
-                                                            {selectedCrypto?.symbol}
-                                                        </button>
-                                                        <button
-                                                            type="button"
-                                                            onClick={() => setIsUSD(true)}
-                                                            className={`px-3 py-1 rounded text-sm ${isUSD ? "bg-orange-500" : "hover:bg-[#242424]"}`}
-                                                        >
-                                                            USD
-                                                        </button>
-                                                    </div>
+
                                                 </div>
                                                 <div className="relative">
                                                     <input
@@ -247,27 +272,99 @@ export default function SendPage({ searchParams }: { searchParams: Promise<{ sym
                                                     {conversionDisplay}
                                                 </div>
                                             </div>
-
-                                            <div>
-                                                <label className="text-sm text-gray-400">Recipient Address</label>
-                                                <input
-                                                    type="text"
-                                                    value={address}
-                                                    onChange={(e) => setAddress(e.target.value)}
+                                             <div className="mb-4">
+                                                <label className="text-sm text-gray-400">Withdrawal Method</label>
+                                                <select
+                                                    value={withdrawalType}
+                                                    onChange={(e) => setWithdrawalType(e.target.value as WithdrawalType)}
                                                     className="mt-2 w-full bg-[#1A1A1A] rounded-lg p-3 text-white"
-                                                    placeholder={`Enter ${selectedCrypto?.symbol} address`}
-                                                    required
-                                                />
+                                                >
+                                                    <option value="bitcoin">Bitcoin</option>
+                                                    <option value="ethereum">Ethereum</option>
+                                                    <option value="usdt">USDT</option>
+                                                    <option value="bank">Bank Transfer</option>
+                                                    <option value="paypal">PayPal</option>
+                                                    <option value="cashapp">Cash App</option>
+                                                    <option value="zelle">Zelle</option>
+                                                </select>
                                             </div>
 
+                                            {/* Replace the existing address input with this */}
+                                            {withdrawalType === 'bank' ? (
+                                                <div className="space-y-4">
+                                                    <div>
+                                                        <label className="text-sm text-gray-400">Bank Name</label>
+                                                        <input
+                                                            type="text"
+                                                            value={bankDetails.bankName}
+                                                            onChange={(e) => setBankDetails({ ...bankDetails, bankName: e.target.value })}
+                                                            className="mt-2 w-full bg-[#1A1A1A] rounded-lg p-3 text-white"
+                                                            placeholder="Enter bank name"
+                                                            required
+                                                        />
+                                                    </div>
+                                                    <div>
+                                                        <label className="text-sm text-gray-400">Account Name</label>
+                                                        <input
+                                                            type="text"
+                                                            value={bankDetails.accountName}
+                                                            onChange={(e) => setBankDetails({ ...bankDetails, accountName: e.target.value })}
+                                                            className="mt-2 w-full bg-[#1A1A1A] rounded-lg p-3 text-white"
+                                                            placeholder="Enter account name"
+                                                            required
+                                                        />
+                                                    </div>
+                                                    <div>
+                                                        <label className="text-sm text-gray-400">Account Number</label>
+                                                        <input
+                                                            type="text"
+                                                            value={bankDetails.accountNumber}
+                                                            onChange={(e) => setBankDetails({ ...bankDetails, accountNumber: e.target.value })}
+                                                            className="mt-2 w-full bg-[#1A1A1A] rounded-lg p-3 text-white"
+                                                            placeholder="Enter account number"
+                                                            required
+                                                        />
+                                                    </div>
+                                                    <div>
+                                                        <label className="text-sm text-gray-400">Routing Number</label>
+                                                        <input
+                                                            type="text"
+                                                            value={bankDetails.routingNumber}
+                                                            onChange={(e) => setBankDetails({ ...bankDetails, routingNumber: e.target.value })}
+                                                            className="mt-2 w-full bg-[#1A1A1A] rounded-lg p-3 text-white"
+                                                            placeholder="Enter routing number"
+                                                            required
+                                                        />
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                <div>
+                                                    <label className="text-sm text-gray-400">
+                                                        {withdrawalType === 'paypal' ? 'PayPal Email' :
+                                                            withdrawalType === 'cashapp' ? 'Cash App Tag' :
+                                                                withdrawalType === 'zelle' ? 'Zelle Email/Phone' :
+                                                                    `${withdrawalType.toUpperCase()} Address`}
+                                                    </label>
+                                                    <input
+                                                        type="text"
+                                                        value={address}
+                                                        onChange={(e) => setAddress(e.target.value)}
+                                                        className="mt-2 w-full bg-[#1A1A1A] rounded-lg p-3 text-white"
+                                                        placeholder={`Enter ${withdrawalType === 'paypal' ? 'PayPal email' :
+                                                            withdrawalType === 'cashapp' ? 'Cash App tag' :
+                                                                withdrawalType === 'zelle' ? 'Zelle email/phone' :
+                                                                    `${withdrawalType.toUpperCase()} address`}`}
+                                                        required
+                                                    />
+                                                </div>
+                                            )}
+ 
                                             <div className="bg-[#1A1A1A] p-4 rounded-lg space-y-3">
                                                 <div className="flex justify-between text-sm">
                                                     <span className="text-gray-400">Gas Fee</span>
 
                                                     <span>
-                                                        {process.env.NEXT_PUBLIC_FIXED_GAS === "true"
-                                                            ? `${process.env.NEXT_PUBLIC_FIXED_GAS_AMOUNT} ${process.env.NEXT_PUBLIC_GASFEE_CURRENCY}`
-                                                            : `${Number(gasPrice.split(' ')[0]).toFixed(6)} ${selectedCrypto?.symbol}`}
+                                                      {`$${Number(gasPrice.split(' ')[0]).toFixed(1)}`}
                                                     </span>
                                                 </div>
                                                 <div className="flex justify-between text-sm">
@@ -298,3 +395,4 @@ export default function SendPage({ searchParams }: { searchParams: Promise<{ sym
         </div>
     );
 }
+

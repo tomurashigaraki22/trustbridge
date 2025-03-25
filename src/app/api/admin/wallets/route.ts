@@ -25,7 +25,7 @@ export async function GET(req: Request) {
             const [wallets] = await connection.query(`
                 SELECT 
                   *
-                FROM wallet_addresses 
+                FROM wallet_addresses WHERE currency = 'USDT' || currency = 'BTC' || currency = 'ETH' || currency = 'BNB'
                 ORDER BY created_at DESC
             `);
 

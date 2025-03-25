@@ -78,7 +78,9 @@ export function UserModal({ user, onClose, onUpdate }: UserModalProps) {
     const [kycStatus, setKycStatus] = useState(user.kyc_status);
     const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [investments, setInvestments] = useState<Investment[]>([]);
+    const [bonusAmount, setBonusAmount] = useState('');
     const [showNotification, setShowNotification] = useState(false);
+    const [Notification, setNotification] = useState("");
     const [bots, setBots] = useState<Bot[]>([]);
     const [balances, setBalances] = useState({
         btc: user.btc_balance || "0",
@@ -232,17 +234,49 @@ export function UserModal({ user, onClose, onUpdate }: UserModalProps) {
             if (res.ok) {
                 onUpdate();
                 setShowNotification(true);
+                setNotification('KYC Status updated successfully')
                 setTimeout(() => setShowNotification(false), 3000); // Hide after 3 seconds
             }
         } catch (error) {
             console.error('Failed to update KYC status:', error);
         }
     };
+
+    // Add this after other state declarations
+
+    // Add this after other functions
+    const handleBonusSubmit = async () => {
+        try {
+            const res = await fetch(`/api/admin/users/${user.id}/bonus`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${Cookies.get('auth-token')}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    amount: Number(bonusAmount),
+                    type: 'bonus',
+                    currency: 'btc'
+                }),
+            });
+
+            if (res.ok) {
+                setBonusAmount('');
+                onUpdate();
+                setNotification('Bonus added successfully')
+                setShowNotification(true);
+                setTimeout(() => setShowNotification(false), 3000);
+            }
+        } catch (error) {
+            console.error('Failed to add bonus:', error);
+        }
+    };
+
     return (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
             {showNotification && (
                 <div className="fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg z-50">
-                    KYC Status updated successfully
+                    {Notification}
                 </div>
             )}
             <div className="bg-[#121212] rounded-lg w-full max-w-3xl max-h-[90vh] overflow-hidden">
@@ -389,28 +423,46 @@ export function UserModal({ user, onClose, onUpdate }: UserModalProps) {
                         </div>
                     )}
 
-                    {activeTab === 'balances' && (
+                     {activeTab === 'balances' && (
                         <div className="space-y-6">
-                            {Object.entries(balances).map(([currency, amount]) => (
-                                <div key={currency} className="flex items-center gap-4">
-                                    <span className="uppercase w-20">{currency}</span>
+                            <div className="flex items-center gap-4">
+                                <span className="uppercase w-20">BALANCE</span>
+                                <input
+                                    type="number"
+                                    value={balances.btc}
+                                    onChange={(e) => setBalances(prev => ({
+                                        ...prev,
+                                        btc: e.target.value
+                                    }))}
+                                    className="bg-[#1A1A1A] text-white rounded-lg px-4 py-2"
+                                />
+                                <button
+                                    onClick={() => updateBalance('btc', Number(balances.btc))}
+                                    className="bg-orange-500 text-white px-4 py-2 rounded-lg"
+                                >
+                                    Update
+                                </button>
+                            </div>
+
+                            {/* Add Bonus Section */}
+                            <div className="mt-8">
+                                <h3 className="text-lg font-medium mb-4">Add Bonus</h3>
+                                <div className="flex items-center gap-4">
                                     <input
                                         type="number"
-                                        value={amount}
-                                        onChange={(e) => setBalances(prev => ({
-                                            ...prev,
-                                            [currency]: e.target.value
-                                        }))}
-                                        className="bg-[#1A1A1A] text-white rounded-lg px-4 py-2"
+                                        value={bonusAmount}
+                                        onChange={(e) => setBonusAmount(e.target.value)}
+                                        placeholder="Enter bonus amount"
+                                        className="bg-[#1A1A1A] text-white rounded-lg px-4 py-2 flex-1"
                                     />
                                     <button
-                                        onClick={() => updateBalance(currency, Number(amount))}
-                                        className="bg-orange-500 text-white px-4 py-2 rounded-lg"
+                                        onClick={handleBonusSubmit}
+                                        className="bg-green-500 text-white px-4 py-2 rounded-lg"
                                     >
-                                        Update
+                                        Add Bonus
                                     </button>
                                 </div>
-                            ))}
+                            </div>
                         </div>
                     )}
 

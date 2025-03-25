@@ -73,8 +73,7 @@ export function TopBar({ title, notices = [] }: TopBarProps) {
                     >
                         <Menu size={24} className="text-gray-400" />
                     </button>
-                    <h1 className="text-lg lg:text-xl font-bold">{title}</h1>
-
+ 
                 </div>
                 <div className="flex items-center space-x-4">
                     <div className="relative">

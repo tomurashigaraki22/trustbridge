@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
 import { AuthProvider } from "@/context/AuthContext";
 import "./globals.css";
-import { LenisProvider } from "@/context/LenisProvider";
 import { SidebarProvider } from '@/context/SidebarContext'
 import { OTPProvider } from "@/context/OTPContext";
 import { AccessCodeProvider } from "@/context/AccessContext";
@@ -88,12 +87,10 @@ export default function RootLayout({
           <OTPProvider>
             <SidebarProvider>
               <AccessCodeProvider>
-                <LenisProvider>
-                  <TranslateProvider>
+                   <TranslateProvider>
                     {children}
                   </TranslateProvider>
-                </LenisProvider>
-              </AccessCodeProvider>
+               </AccessCodeProvider>
             </SidebarProvider>
           </OTPProvider>
         </AuthProvider>

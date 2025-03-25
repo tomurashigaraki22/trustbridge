@@ -114,7 +114,7 @@ export default function InvestPage() {
                 maximumFractionDigits: 6,
             }),
         }))
-        .filter((asset) => asset.balance > 0)
+        
 
 
     useEffect(() => {
@@ -249,20 +249,17 @@ export default function InvestPage() {
                     <TopBar title="Investment" notices={userData?.notices} />
                     <div className="p-4 lg:p-8">
                         {/* Active Investments */}
-                        <div className="bg-[#121212] rounded-[1rem] p-6 mb-6">
-                            <div className="flex justify-between items-center mb-4">
-                                <h2 className="text-xl font-semibold">Recent Investments</h2>
+                    
+                        {/* Investment Packages */}
+                        <div className="flex justify-between items-center mb-4">
+                                <h2 className="text-xl font-semibold">Investment Packages</h2>
                                 <button
                                     onClick={() => router.push('/dashboard/investments')}
                                     className="text-orange-500 hover:text-orange-600"
                                 >
-                                    View All
+                                    View Recent
                                 </button>
                             </div>
-                            <InvestmentList investments={userInvestments} limit={3} />
-                        </div>
-
-                        {/* Investment Packages */}
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {loading ? (
                                 <div className="col-span-full text-center py-8">Loading packages...</div>
@@ -270,7 +267,7 @@ export default function InvestPage() {
                                 <div className="col-span-full text-center text-red-500 py-8">{error}</div>
                             ) : (
                                 investmentPackages.map((pkg) => (
-                                    <div key={pkg.id} className="bg-[#121212] rounded-[1rem] p-6 relative overflow-hidden">
+                                    <div key={pkg.id} className="bg-[#000] rounded-[1rem] p-6 relative overflow-hidden">
                                         {pkg.risk_level === "low" && (
                                             <div className="absolute top-4 right-4 bg-green-500/20 text-green-500 px-3 py-1 rounded-full text-sm">
                                                 Recommended
@@ -335,6 +332,18 @@ export default function InvestPage() {
                                 ))
                             )}
                         </div>
+                        <div className="bg-[#121212] rounded-[1rem] p-6 mb-6">
+                            <div className="flex justify-between items-center mb-4">
+                                <h2 className="text-xl font-semibold">Recent Investments</h2>
+                                <button
+                                    onClick={() => router.push('/dashboard/investments')}
+                                    className="text-orange-500 hover:text-orange-600"
+                                >
+                                    View All
+                                </button>
+                            </div>
+                            <InvestmentList investments={userInvestments} limit={3} />
+                        </div>
 
                         {/* Investment Modal */}
                         {showConfirm && selectedPackage && (
@@ -355,7 +364,7 @@ export default function InvestPage() {
                                                     className="w-full bg-[#1A1A1A] rounded-lg p-3 flex items-center justify-between"
                                                 >
                                                     <div className="flex items-center gap-2">
-                                                        <span>{selectedCurrency}</span>
+                                                        <span>Account Balance</span>
                                                         <span className="text-gray-400">
                                                             (Balance: {assets.find((a) => a.name === selectedCurrency)?.formattedBalance || "0.00"})
                                                         </span>
@@ -365,7 +374,7 @@ export default function InvestPage() {
 
                                                 {showCurrencyDropdown && (
                                                     <div className="absolute top-full left-0 mt-2 w-full bg-[#1A1A1A] rounded-lg shadow-lg z-10 max-h-60 overflow-y-auto">
-                                                        {assets.map((asset) => (
+                                                        {assets.filter(assets => assets.name == 'BTC').map((asset) => (
                                                             <button
                                                                 key={asset.name}
                                                                 onClick={() => {
@@ -375,7 +384,7 @@ export default function InvestPage() {
                                                                 }}
                                                                 className="w-full p-3 text-left hover:bg-[#242424] first:rounded-t-lg last:rounded-b-lg flex items-center justify-between"
                                                             >
-                                                                <span>{asset.name}</span>
+                                                                <span>Account Balance</span>
                                                                 <span className="text-gray-400">{asset.formattedBalance}</span>
                                                             </button>
                                                         ))}
