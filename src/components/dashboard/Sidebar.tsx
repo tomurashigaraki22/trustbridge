@@ -35,7 +35,7 @@ export function Sidebar() {
         { icon: Package2Icon, label: 'Packages', href: '/dashboard/invest' },
         { icon: BanknoteIcon, label: 'Deposit', href: '/dashboard/transactions/deposit' },
         { icon: Wallet, label: 'Withdraw', href: '/dashboard/transactions/send' },
-        { icon: TrendingUp, label: 'My Investments', href: '/dashboard/transactions/investments' },
+        { icon: TrendingUp, label: 'My Investments', href: '/dashboard/investments' },
         { icon: HistoryIcon, label: 'Transactions', href: '/dashboard/transactions' },
         { icon: Users, label: 'KYC', href: '/dashboard/kyc' },
         { icon: UserCircle, label: 'Profile', href: '/dashboard/profile' },
