@@ -154,6 +154,7 @@ export default function DepositPage({ searchParams }: { searchParams: Promise<{ 
                             <div className="bg-[#121212] rounded-[1rem] p-6">
                                 <div className="flex items-center justify-between mb-6">
                                     <h2 className="text-lg font-bold">Deposit {selectedCrypto.name}</h2>
+                                    
                                     <select
                                         value={selectedCrypto.symbol}
                                         onChange={(event) => {
