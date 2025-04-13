@@ -94,21 +94,7 @@ export function useUserData() {
 
   const calculateTotalBalance = (data: UserData) => {
     const balances = [
-      data.user.btc_balance,
-      data.user.eth_balance,
-      data.user.usdt_balance,
-      data.user.bnb_balance,
-      data.user.xrp_balance,
-      data.user.ada_balance,
-      data.user.doge_balance,
-      data.user.sol_balance,
-      data.user.dot_balance,
-      data.user.matic_balance,
-      data.user.link_balance,
-      data.user.uni_balance,
-      data.user.avax_balance,
-      data.user.ltc_balance,
-      data.user.shib_balance
+      data.user.btc_balance
     ];
 
     const total = balances.reduce((sum, balance) => sum + (Number(balance) || 0), 0);

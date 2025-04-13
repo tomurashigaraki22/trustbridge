@@ -129,9 +129,7 @@ export default function AdminUsersPage() {
                                     <tr className="border-b border-gray-800">
                                         <th className="text-left p-4 text-sm font-medium text-gray-400">User</th>
                                         <th className="text-left p-4 text-sm font-medium text-gray-400">Email</th>
-                                        <th className="text-right p-4 text-sm font-medium text-gray-400">BTC Balance</th>
-                                        <th className="text-right p-4 text-sm font-medium text-gray-400">ETH Balance</th>
-                                        <th className="text-right p-4 text-sm font-medium text-gray-400">USDT Balance</th>
+                                        <th className="text-right p-4 text-sm font-medium text-gray-400">Balance</th> 
                                         <th className="text-right p-4 text-sm font-medium text-gray-400">Status</th>
                                         <th className="text-right p-4 text-sm font-medium text-gray-400">Joined</th>
                                     </tr>
@@ -148,7 +146,6 @@ export default function AdminUsersPage() {
                                             </td>
                                             <td className="p-4">{user.email}</td>
                                             <td className="p-4 text-right">{Number(user.btc_balance).toFixed(8)}</td>
-                                            <td className="p-4 text-right">{Number(user.eth_balance).toFixed(8)}</td>
                                             <td className="p-4 text-right">{Number(user.usdt_balance).toFixed(2)}</td>
                                             <td className="p-4 text-right">
                                                 <span className={`px-2 py-1 rounded text-xs ${user.status == "active" ? 'bg-green-500/20 text-green-500' : 'bg-red-500/20 text-red-500'

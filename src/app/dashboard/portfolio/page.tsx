@@ -55,20 +55,6 @@ export default function PortfolioPage() {
 
     const assets = [
         { name: "BTC", balance: Number(userData?.user.btc_balance || "0") },
-        { name: "ETH", balance: Number(userData?.user.eth_balance || "0") },
-        { name: "USDT", balance: Number(userData?.user.usdt_balance || "0") },
-        { name: "BNB", balance: Number(userData?.user.bnb_balance || "0") },
-        { name: "XRP", balance: Number(userData?.user.xrp_balance || "0") },
-        { name: "ADA", balance: Number(userData?.user.ada_balance || "0") },
-        { name: "DOGE", balance: Number(userData?.user.doge_balance || "0") },
-        { name: "SOL", balance: Number(userData?.user.sol_balance || "0") },
-        { name: "DOT", balance: Number(userData?.user.dot_balance || "0") },
-        { name: "MATIC", balance: Number(userData?.user.matic_balance || "0") },
-        { name: "LINK", balance: Number(userData?.user.link_balance || "0") },
-        { name: "UNI", balance: Number(userData?.user.uni_balance || "0") },
-        { name: "AVAX", balance: Number(userData?.user.avax_balance || "0") },
-        { name: "LTC", balance: Number(userData?.user.ltc_balance || "0") },
-        { name: "SHIB", balance: Number(userData?.user.shib_balance || "0") },
     ]
         .map((asset) => {
             const priceUsd = asset.balance
