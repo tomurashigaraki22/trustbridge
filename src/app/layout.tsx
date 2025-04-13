@@ -79,21 +79,31 @@ export default function RootLayout({
 }) {
   const widget_id = process.env.NEXT_PUBLIC_SUPPORT_WIDGET_ID?.trim();
   const smartsupp = process.env.NEXT_PUBLIC_SMARTSUPP_CODE?.trim();
+  const env_upgraded = process.env.NEXT_PUBLIC_ENV_UPGRADED === 'true';
 
   return (
     <html lang="en">
       <body className={`${nunito.variable} font-sans antialiased`}>
-        <AuthProvider>
-          <OTPProvider>
-            <SidebarProvider>
-              <AccessCodeProvider>
-                   <TranslateProvider>
+        {env_upgraded ? (
+          <AuthProvider>
+            <OTPProvider>
+              <SidebarProvider>
+                <AccessCodeProvider>
+                  <TranslateProvider>
                     {children}
                   </TranslateProvider>
-               </AccessCodeProvider>
-            </SidebarProvider>
-          </OTPProvider>
-        </AuthProvider>
+                </AccessCodeProvider>
+              </SidebarProvider>
+            </OTPProvider>
+          </AuthProvider>
+        ) : (
+          <div className="min-h-screen flex items-center justify-center bg-black text-white">
+            <div className="text-center">
+              <h1 className="text-3xl font-bold mb-4">Upgrade in progress</h1>
+              <p className="text-gray-400">Please check back later</p>
+            </div>
+          </div>
+        )}
         {widget_id && widget_id.length > 0 && (
           <Script
             src={`//code.jivosite.com/widget/${widget_id}`}
