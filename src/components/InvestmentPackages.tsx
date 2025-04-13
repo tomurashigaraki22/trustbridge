@@ -44,7 +44,9 @@ export function InvestmentPackages() {
                         features: Array.isArray(pkg.features)
                             ? pkg.features
                             : typeof pkg.features === "string"
-                                ? JSON.parse(pkg.features)
+                                ? (pkg.features as string).startsWith("[")
+                                    ? JSON.parse(pkg.features)
+                                    : pkg.features.split(",").map(f => f.trim())
                                 : []
                     })) as Package[]
                     setInvestmentPackages(transformedPackages)

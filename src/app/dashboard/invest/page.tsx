@@ -130,13 +130,16 @@ export default function InvestPage() {
                 if (!response.ok) throw new Error("Failed to fetch investment packages")
 
                 const data = await response.json()
+                console.log(data)
                 if (data.success) {
                     const transformedPackages = data.packages.map((pkg: RawPackage) => ({
                         ...pkg,
                         features: Array.isArray(pkg.features)
                             ? pkg.features
                             : typeof pkg.features === "string"
-                                ? JSON.parse(pkg.features)
+                                ? (pkg.features as string).startsWith("[")
+                                    ? JSON.parse(pkg.features)
+                                    : (pkg.features as string).split(",").map(f => f.trim())
                                 : [],
                     }))
                     setInvestmentPackages(transformedPackages)
