@@ -42,7 +42,7 @@ export async function GET(req: Request) {
         const [userCount] = await pool.query<CountResult[]>('SELECT COUNT(*) as count FROM users');
         const [transactionCount] = await pool.query<CountResult[]>('SELECT COUNT(*) as count FROM transactions');
         const [totalVolume] = await pool.query<VolumeResult[]>(
-            'SELECT SUM(amount) as total FROM transactions WHERE status = "completed"'
+            'SELECT SUM(amount) as total FROM transactions'
         );
 
         return NextResponse.json({

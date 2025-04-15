@@ -65,8 +65,8 @@ export async function POST(request: Request) {
                 </div>
             `,
         });
-
-        return NextResponse.json({ 
+     
+        return NextResponse.json({
             success: true,
             message: 'OTP sent successfully'
         });

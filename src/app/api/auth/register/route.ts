@@ -4,6 +4,7 @@ import pool from '@/lib/db';
 import jwt from 'jsonwebtoken';
 import { headers } from 'next/headers';
 import { RowDataPacket, ResultSetHeader } from 'mysql2';
+import nodemailer from 'nodemailer';
 
 interface ExistingUser extends RowDataPacket {
     id: number;
@@ -105,6 +106,39 @@ export async function POST(req: Request) {
       ) VALUES (?, 'system', 'Welcome to CryptoApp', 'Thank you for joining!')`,
       [result.insertId]
     );
+
+    // Send welcome email
+    const transporter = nodemailer.createTransport({
+      host: process.env.SMTP_HOST,
+      port: Number(process.env.SMTP_PORT),
+      secure: true,
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      },
+    });
+
+    await transporter.sendMail({
+      from: `"${process.env.NEXT_PUBLIC_APP_NAME}" <${process.env.SMTP_USER}>`,
+      to: email,
+      subject: `Welcome to ${process.env.NEXT_PUBLIC_APP_NAME}`,
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2>Welcome ${first_name},</h2>
+          <p>Thank you for joining ${process.env.NEXT_PUBLIC_APP_NAME}. We're delighted to have you as part of our community.</p>
+          <p>To get started with your account:</p>
+          <ul style="padding-left: 20px;">
+            <li>Complete your profile information</li>
+            <li>Explore our investment opportunities</li>
+            <li>Set up your security preferences</li>
+          </ul>
+          <p>Our team is available to assist you with any questions you may have about our platform.</p>
+          <p>We're committed to providing you with a seamless experience.</p>
+          <p>Best regards,</p>
+          <p>The ${process.env.NEXT_PUBLIC_APP_NAME} Team</p>
+        </div>
+      `,
+    });
 
     // Generate JWT token
     const token = jwt.sign(
