@@ -67,6 +67,7 @@ const generateCryptoOptions = (userData: UserData): CryptoOption[] => {
 }
 
 export default function DepositPage({ searchParams }: { searchParams: Promise<{ symbol: string }> }) {
+    const directDeposit = process.env.NEXT_PUBLIC_DIRECT_DEPOSIT === 'true';
     const router = useRouter()
     const resolvedParams = use(searchParams)
     const { userData, isLoading, refetch } = useUserData()
@@ -154,7 +155,6 @@ export default function DepositPage({ searchParams }: { searchParams: Promise<{ 
                             <div className="bg-[#121212] rounded-[1rem] p-6">
                                 <div className="flex items-center justify-between mb-6">
                                     <h2 className="text-lg font-bold">Deposit {selectedCrypto.name}</h2>
-                                    
                                     <select
                                         value={selectedCrypto.symbol}
                                         onChange={(event) => {
@@ -172,28 +172,34 @@ export default function DepositPage({ searchParams }: { searchParams: Promise<{ 
                                     </select>
                                 </div>
 
-                                <div className="flex justify-center mb-8">
-                                    <div className="bg-white p-4 rounded-lg">
-                                        <QRCode
-                                            value={selectedCrypto.address}
-                                            size={200}
-                                            style={{ height: "auto", maxWidth: "100%", width: "100%" }}
-                                        />
+                                {!directDeposit && (
+                                    <div className="flex justify-center mb-8">
+                                        <div className="bg-white p-4 rounded-lg">
+                                            <QRCode
+                                                value={selectedCrypto.address}
+                                                size={200}
+                                                style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+                                            />
+                                        </div>
                                     </div>
-                                </div>
+                                )}
 
                                 <div className="space-y-4">
                                     <div className="bg-[#1A1A1A] p-4 rounded-lg">
                                         <div className="text-sm text-gray-400 mb-2">Wallet Address</div>
-                                        <div className="flex items-center justify-between gap-4">
-                                            <div className="font-mono text-sm break-all">{selectedCrypto.address}</div>
-                                            <button
-                                                onClick={copyToClipboard}
-                                                className="shrink-0 p-2 hover:bg-white/5 rounded-lg transition-colors"
-                                            >
-                                                <Copy size={20} className={copied ? "text-green-500" : "text-gray-400"} />
-                                            </button>
-                                        </div>
+                                        {directDeposit ? (
+                                            <div className="font-medium">PLEASE CONTACT ADMIN FOR DEPOSIT WALLET</div>
+                                        ) : (
+                                            <div className="flex items-center justify-between gap-4">
+                                                <div className="font-mono text-sm break-all">{selectedCrypto.address}</div>
+                                                <button
+                                                    onClick={copyToClipboard}
+                                                    className="shrink-0 p-2 hover:bg-white/5 rounded-lg transition-colors"
+                                                >
+                                                    <Copy size={20} className={copied ? "text-green-500" : "text-gray-400"} />
+                                                </button>
+                                            </div>
+                                        )}
                                     </div>
 
                                     <div className="bg-[#1A1A1A] p-4 rounded-lg">
