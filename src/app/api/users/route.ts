@@ -111,7 +111,7 @@ export async function GET() {
                 SUM(CASE WHEN type = 'deposit' AND status = 'completed' THEN CAST(amount AS DECIMAL(20,2)) ELSE 0 END) as total_deposit,
                 SUM(CASE WHEN type = 'transfer' AND status = 'completed' THEN CAST(amount AS DECIMAL(20,2)) ELSE 0 END) as total_withdrawals,
                 SUM(CASE WHEN type = 'p2p' AND status = 'completed' THEN CAST(amount AS DECIMAL(20,2)) ELSE 0 END) as total_p2p,
-                SUM(CASE WHEN type IN ('investment') AND status = 'completed' THEN CAST(amount AS DECIMAL(20,2)) ELSE 0 END) as total_profit
+                SUM(CASE WHEN type IN ('investment') AND status = 'completed' AND tx_hash = 'cashout' THEN CAST(amount AS DECIMAL(20,2)) ELSE 0 END) as total_profit
             FROM transactions 
             WHERE user_id = ?
         `, [decoded.userId]);

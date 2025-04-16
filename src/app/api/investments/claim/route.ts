@@ -93,8 +93,8 @@ export async function POST(req: Request) {
 
             // Add transaction record
             await connection.query(
-                `INSERT INTO transactions (user_id, type, currency, amount, status, description) 
-                VALUES (?, 'investment', ?, ?, 'completed', ?)`,
+                `INSERT INTO transactions (user_id, type, currency, amount, status, description,tx_hash) 
+                VALUES (?, 'investment', ?, ?, 'completed', ?,'cashout')`,
                 [
                     decoded.userId,
                     investment.currency,

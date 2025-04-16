@@ -22,14 +22,14 @@ interface UserBalance extends RowDataPacket {
 export async function GET(req: Request) {
     try {
         console.log(req)
- 
+
 
         // Fetch investment packages
         const connection = await pool.getConnection()
         try {
             const [packages] = await connection.query("SELECT * FROM investment_packages WHERE is_active = TRUE")
 
- 
+
             return NextResponse.json({
                 success: true,
                 packages,
@@ -150,19 +150,6 @@ export async function POST(req: Request) {
                 [amountUsd, decoded.userId]
             );
 
-
-            await connection.query(
-                `INSERT INTO transactions 
-                (user_id, type, currency, amount, fee, status, to_address, description) 
-                VALUES (?, 'transfer', ?, ?, ?, 'completed', ?, ?)`,
-                [
-                    decoded.userId,
-                    currency,
-                    amountUsd,
-                    '0.0005',
-                    investmentId,
-                    `Successfully invested ${amountUsd} ${currency} (${amountUsd} USD) in ${investmentPackage.name}`]
-            );
 
             // Create notice
             // Update notice message

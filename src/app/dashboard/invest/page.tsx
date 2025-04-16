@@ -234,7 +234,7 @@ export default function InvestPage() {
 
             if (data.success) {
                 router.push(
-                    `/dashboard/transactions/success?type=investment&package=${selectedPackage.name}&amount=${amount}&currency=${selectedCurrency}&autoCompound=${autoCompound}`,
+                    `/dashboard/transactions/success?type=investment&symbol=${selectedPackage.name}&amount=${amount}&currency=${selectedCurrency}&autoCompound=${autoCompound}`,
                 )
             } else {
                 throw new Error(data.error || "Investment failed")

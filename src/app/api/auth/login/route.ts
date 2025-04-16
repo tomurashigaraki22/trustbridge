@@ -63,10 +63,8 @@ export async function POST(req: Request) {
           { status: 403 }
         );
       case 'pending':
-        return NextResponse.json(
-          { error: 'Account is pending activation. Please check your email.' },
-          { status: 403 }
-        );
+        break;
+
       case 'active':
         break;
       default:
