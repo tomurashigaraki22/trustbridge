@@ -1,74 +1,36 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useCryptoData } from "@/hooks/useCryptoData";
 
-interface CryptoData {
-  id: string;
-  rank: string;
-  symbol: string;
-  name: string;
-  supply: string;
-  maxSupply: string | null;
-  marketCapUsd: string;
-  volumeUsd24Hr: string;
-  priceUsd: string;
-  changePercent24Hr: string;
-  vwap24Hr: string;
-  explorer: string;
-}
-
-interface ApiResponse {
-  data: CryptoData[];
+interface CryptoItemProps {
+  crypto: {
+    id: string;
+    symbol: string;
+    priceUsd: string;
+    changePercent24Hr: string;
+  };
 }
 
 export function CryptoTicker() {
-  const [cryptoData, setCryptoData] = useState<CryptoData[]>([]);
+  const { cryptoData, isLoading, error } = useCryptoData();
 
-  useEffect(() => {
-    const fetchCryptoData = async () => {
-      try {
-        const response = await fetch("https://api.coincap.io/v2/assets?limit=50");
-        
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        const data: ApiResponse = await response.json();
-        
-        if (data && Array.isArray(data.data)) {
-          setCryptoData(data.data);
-        } else {
-          console.log("Invalid data format received");
-          setCryptoData([]);
-        }
-      } catch (error) {
-        console.log("Error fetching crypto data:", error);
-        setCryptoData([]);
-      }
-    };
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
 
-    fetchCryptoData();
-    const interval = setInterval(fetchCryptoData, 10000);
-
-    return () => clearInterval(interval);
-  }, []);
+  const cryptoArray = Object.values(cryptoData);
 
   return (
     <div className="bg-[#000] text-white py-4 overflow-hidden">
       <div className="container mx-auto">
         <div className="flex items-center space-x-4 animate-ticker">
-          {Array.isArray(cryptoData) && cryptoData.map((crypto) => (
+          {cryptoArray.map((crypto) => (
             <CryptoItem key={crypto.id} crypto={crypto} />
           ))}
         </div>
       </div>
     </div>
   );
-}
-
-interface CryptoItemProps {
-  crypto: CryptoData;
 }
 
 function CryptoItem({ crypto }: CryptoItemProps) {

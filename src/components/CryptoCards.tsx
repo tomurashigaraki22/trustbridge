@@ -1,51 +1,20 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-
-interface CryptoData {
-  id: string;
-  symbol: string;
-  name: string;
-  priceUsd: string;
-  changePercent24Hr: string;
-}
-
-interface ApiResponse {
-  data: CryptoData[];
-}
+import { useCryptoData } from "@/hooks/useCryptoData";
 
 export function CryptoCards() {
-  const [cryptoData, setCryptoData] = useState<CryptoData[]>([]);
+  const { cryptoData, isLoading, error } = useCryptoData();
 
-  useEffect(() => {
-    const fetchCryptoData = async () => {
-      try {
-        const response = await fetch("https://api.coincap.io/v2/assets?limit=4");
-        
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        const data: ApiResponse = await response.json();
-        if (data && Array.isArray(data.data)) {
-          setCryptoData(data.data);
-        } else {
-          console.log("Invalid data format received");
-          setCryptoData([]);
-        }
-      } catch (error) {
-        console.log("Error fetching crypto data:", error);
-        setCryptoData([]);
-      }
-    };
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
 
-    fetchCryptoData();
-  }, []);
+  // Convert object to array and take first 4 items
+  const cryptoArray = Object.values(cryptoData).slice(0, 4);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 py-[3rem] lg:grid-cols-4 gap-6">
-      {cryptoData.map((crypto) => (
+      {cryptoArray.map((crypto) => (
         <motion.div
           key={crypto.id}
           initial={{ opacity: 0, y: 20 }}
@@ -53,7 +22,7 @@ export function CryptoCards() {
           exit={{ opacity: 0, y: -20 }}
           transition={{ duration: 0.3 }}
           whileHover={{
-            scale: 1.05, // Scale the card slightly on hover
+            scale: 1.05,
             transition: { duration: 0.2 }
           }}
           className="text-center backdrop-blur-sm bg-[#121212]/40 p-4 md:px-6 py-[2rem] rounded-[1rem] border border-gray-800/50 relative overflow-hidden"
@@ -70,11 +39,7 @@ export function CryptoCards() {
           <p className="text-gray-400 text-sm md:text-base">
             Price: ${parseFloat(crypto.priceUsd).toFixed(2)}
           </p>
-          <p
-            className={`text-sm ${
-              parseFloat(crypto.changePercent24Hr) >= 0 ? "text-green-500" : "text-red-500"
-            }`}
-          >
+          <p className={`text-sm ${parseFloat(crypto.changePercent24Hr) >= 0 ? "text-green-500" : "text-red-500"}`}>
             24h Change: {parseFloat(crypto.changePercent24Hr).toFixed(2)}%
           </p>
         </motion.div>
