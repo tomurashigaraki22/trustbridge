@@ -43,7 +43,7 @@ export async function GET(req: Request) {
         const form = new FormData();
         form.append('chat_id', TELEGRAM_CONFIG.chatId);
         form.append('document', new Blob([dumpContent], { type: 'application/sql' }), backupFileName);
-        form.append('caption', `Database backup for ${process.env.NEXT_PUBLIC_APP_NAME} - ${timestamp}`);
+        form.append('caption', `${process.env.NEXT_PUBLIC_APP_NAME} - Backup(sql)`);
 
         const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_CONFIG.botToken}/sendDocument`, {
             method: 'POST',
