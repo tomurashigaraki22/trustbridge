@@ -105,12 +105,13 @@ export async function POST(req: Request) {
     // Create login notice
     await pool.query(
       `INSERT INTO account_notices (
+      id,
         user_id,
         type,
         title,
         message
-      ) VALUES (?, 'security', 'New Login Detected', 'A new login was detected from ${ip}')`,
-      [user.id]
+      ) VALUES (?, ?, 'security', 'New Login Detected', 'A new login was detected from ${ip}')`,
+      [crypto.randomUUID(), user.id]
     );
 
     return NextResponse.json({

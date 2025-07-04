@@ -27,13 +27,15 @@ SET time_zone = "+00:00";
 -- Table structure for table `account_info`
 --
 
+USE `defaultdb`;
 CREATE TABLE `account_info` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `priority` enum('urgent','normal') NOT NULL,
   `title` varchar(255) NOT NULL,
   `message` text NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -56,15 +58,19 @@ CREATE TABLE `account_notices` (
   `title` varchar(255) NOT NULL,
   `message` text NOT NULL,
   `is_read` tinyint(1) DEFAULT 0,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+USE `defaultdb`;
+ALTER TABLE `account_notices`
+  MODIFY `id` varchar(36) NOT NULL;
 
 --
 -- Dumping data for table `account_notices`
 --
 
 INSERT INTO `account_notices` (`id`, `user_id`, `type`, `title`, `message`, `is_read`, `created_at`) VALUES
-(1, 2, 'security', 'New Login Detected', 'A new login was detected from ::ffff:192.168.1.198', 0, '2025-03-25 21:00:07'),
 (2, 2, 'security', 'New Login Detected', 'A new login was detected from 105.116.12.194', 0, '2025-03-25 21:45:31'),
 (3, 2, 'transaction', 'Transaction Successful', 'Claimed Profit of $1410.7947810952235 from Premium Package investment', 0, '2025-03-25 21:58:05'),
 (4, 2, 'transaction', 'Transfer Initiated', 'Crypto Transfer to bta291nsaodia380qjadad - Amount: $1010.00 BTC', 0, '2025-03-25 21:59:18'),
@@ -106,8 +112,7 @@ INSERT INTO `account_notices` (`id`, `user_id`, `type`, `title`, `message`, `is_
 (43, 2, 'security', 'New Login Detected', 'A new login was detected from 102.90.82.216', 0, '2025-04-12 10:12:05'),
 (44, 2, 'security', 'New Login Detected', 'A new login was detected from 102.90.82.216', 0, '2025-04-12 10:26:54'),
 (45, 3, 'security', 'New Login Detected', 'A new login was detected from 102.90.79.72', 0, '2025-04-12 10:46:58'),
-(46, 49, 'transaction', 'Deposit Pending', 'Your BTC deposit is pending and awaiting confirmation', 1, '2025-04-12 10:54:55'),
-(47, 50, 'system', 'Welcome to CryptoApp', 'Thank you for joining!', 0, '2025-04-12 20:55:44');
+(46, 49, 'transaction', 'Deposit Pending', 'Your BTC deposit is pending and awaiting confirmation', 1, '2025-04-12 10:54:55');
 
 -- --------------------------------------------------------
 
@@ -125,7 +130,8 @@ CREATE TABLE `api_keys` (
   `last_used` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `is_active` tinyint(1) DEFAULT 1,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -140,7 +146,8 @@ CREATE TABLE `crypto_holdings` (
   `crypto_id` varchar(50) NOT NULL,
   `amount` decimal(18,8) NOT NULL DEFAULT 0.00000000,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -170,7 +177,8 @@ CREATE TABLE `investment_packages` (
   `min_amount_usd` decimal(18,2) NOT NULL,
   `max_amount_usd` decimal(18,2) NOT NULL,
   `is_active` tinyint(1) DEFAULT 1,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -202,7 +210,8 @@ CREATE TABLE `kyc_documents` (
   `verified_by` int(11) DEFAULT NULL,
   `verified_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -225,7 +234,8 @@ CREATE TABLE `likes` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `post_id` int(11) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -241,7 +251,8 @@ CREATE TABLE `password_resets` (
   `otp` varchar(6) NOT NULL,
   `expires_at` datetime NOT NULL,
   `used` tinyint(1) DEFAULT 0,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -266,7 +277,8 @@ CREATE TABLE `posts` (
   `user_id` int(11) NOT NULL,
   `likes` int(11) DEFAULT 0,
   `comments` int(11) DEFAULT 0,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -283,7 +295,8 @@ CREATE TABLE `social_accounts` (
   `status` varchar(50) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `password` text DEFAULT NULL
+  `password` text DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -308,7 +321,8 @@ CREATE TABLE `spot_transactions` (
   `amount` decimal(18,8) NOT NULL,
   `price` decimal(18,2) NOT NULL,
   `value` decimal(18,2) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -361,7 +375,8 @@ CREATE TABLE `trades` (
   `amount` decimal(24,8) NOT NULL,
   `price` decimal(24,8) NOT NULL,
   `type` varchar(4) NOT NULL CHECK (`type` in ('buy','sell')),
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -396,7 +411,8 @@ CREATE TABLE `trading_bots` (
   `price_amount` decimal(20,2) DEFAULT NULL,
   `price_currency` enum('BTC','ETH','USDT') DEFAULT NULL,
   `status` enum('active','disabled') DEFAULT 'active',
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -429,7 +445,8 @@ CREATE TABLE `transactions` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `crypto_id` text DEFAULT NULL,
-  `price` int(11) DEFAULT NULL
+  `price` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -620,26 +637,29 @@ CREATE TABLE `users` (
   `profile_image` text DEFAULT NULL,
   `is_admin` tinyint(1) NOT NULL DEFAULT 0,
   `otp_status` varchar(10) DEFAULT 'pending' CHECK (`otp_status` in ('active','pending')),
-  `otp_code` varchar(6) DEFAULT NULL
+  `otp_code` varchar(6) DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `email`, `password`, `username`, `first_name`, `last_name`, `phone_number`, `country`, `status`, `kyc_status`, `two_factor_enabled`, `last_login`, `login_ip`, `btc_balance`, `eth_balance`, `usdt_balance`, `bnb_balance`, `xrp_balance`, `ada_balance`, `doge_balance`, `sol_balance`, `dot_balance`, `matic_balance`, `link_balance`, `uni_balance`, `avax_balance`, `ltc_balance`, `shib_balance`, `created_at`, `updated_at`, `profile_image`, `is_admin`, `otp_status`, `otp_code`) VALUES
-(2, 'investorhonour@gmail.com', '$2a$10$UW7e512K1sFfFDBAe/nK8.jp8PNUqflHqTFJqePHuBAJ0XFXVb4NO', 'd74ez', 'Carl', 'Honour', '9163169949', 'United Kingdom', 'active', 'verified', 0, '2025-04-12 10:26:54', '102.90.82.216', 658.36, 33.00, 117081.15, 0.00, 0.00, NULL, NULL, NULL, 0.00, 0.00, 0.00, 0.00, 900.00, 0.00, 0.00, '2025-02-09 04:24:14', '2025-04-12 10:26:54', NULL, 0, 'active', NULL),
-(3, 'iamvictor2nice@gmail.com', '$2a$10$UW7e512K1sFfFDBAe/nK8.jp8PNUqflHqTFJqePHuBAJ0XFXVb4NO', 'g5lf9', 'Honour', 'Robbie', '', '', 'active', 'pending', 0, '2025-04-12 10:46:58', '102.90.79.72', 595.05, 22.00, 10000.00, 0.00, 0.00, 50.00, 950.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, '2025-02-10 00:01:57', '2025-04-12 10:46:58', NULL, 1, 'active', NULL),
-(40, 'victorodogu5@gmail.com', '$2a$10$RwSYzmcb9tS1zSqN8FVCvuN67dh0/m8ZN4gRTq0EOGJcan.RsSRQG', 'akvqe', 'Jodie ', 'Sweetin', '08160580299', 'Nigeria', 'active', 'none', 0, '2025-04-12 04:16:46', '102.90.82.138', 5400.00, 0.00, 200.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, '2025-03-25 22:16:45', '2025-04-12 04:16:46', NULL, 0, 'active', NULL),
-(41, 'maureli98@yahoo.com', '$2a$10$/dTf2wfOSz58KT.7ULFPaeIsm5c/xBqCQ0LacgdrlmuEPbyRdYMdC', 'o7rkj', 'Michael', 'Aureli', '5862229782', 'United States', 'active', 'none', 0, '2025-03-31 15:24:58', '76.139.155.49', 0.00, 0.00, 200.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, '2025-03-31 15:16:47', '2025-03-31 15:24:58', NULL, 0, 'active', NULL),
-(42, 'yhbkscieew@cmhvzylmfc.com', '$2a$10$Y36J7PRTW4dfeFlBbJEFPeUzE1AeDyITgKPplMhhBlGg5S0s1xmbu', 'm11cv', 'SAMEER', 'VFBGBG', '09898787656', 'India', 'active', 'none', 0, '2025-04-07 18:07:16', '223.185.26.192', 0.00, 0.00, 200.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, '2025-04-07 10:30:15', '2025-04-07 18:07:16', NULL, 0, 'active', NULL),
-(44, 'birdiequeen22@gmail.com', '$2a$10$K7g1ThAoE4klgtvOADPlnu8XmS5ZubKP9bFTicT96756SuvQL1K/6', 'cey2a', 'Grace ', 'Charis ', '0916898941', 'United States', 'active', 'none', 0, '2025-04-08 19:57:35', '102.90.82.135', 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, '2025-04-08 19:57:04', '2025-04-08 19:57:35', NULL, 0, 'active', NULL),
-(45, 'ah0522575@gmail.com', '$2a$10$lFvopcxnFuRt76Ywami0cescX3GAzoHMoTPBKT27lQhgZ.IvBKhQq', 'zvv56', 'Ahmed ', 'Hassan ', '09032230211', 'Russian Federation', 'active', 'none', 0, '2025-04-09 00:51:04', '102.90.81.7', 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, '2025-04-09 00:42:51', '2025-04-09 00:51:04', NULL, 0, 'active', NULL),
-(46, 'rogergarciahernandez2@gmail.com', '$2a$10$QlNXqtMisoiXnax1mmlgpuR98lFfELMpcJimEavHN41AaOy682HBW', '0pxox', 'Yudileidis ', 'Martines Suarez ', '50241901', 'Cuba', 'active', 'none', 0, '2025-04-10 04:53:20', '152.206.186.218', 0.00, 0.00, 200.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, '2025-04-09 20:21:01', '2025-04-10 04:53:20', NULL, 0, 'pending', '762865'),
-(47, 'abrahamkolawole222@gmail.com', '$2a$10$Y2CL8zDNSr3sEL0/pLkhjuTm2XZtzmK6G6VDMYUbA3rSLZqFLyFM.', 'haqwt', 'Edwin', 'Rich ', '09135868248', 'Nigeria', 'active', 'none', 0, '2025-04-10 17:31:35', '102.89.44.53', 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, '2025-04-10 17:31:10', '2025-04-10 17:31:35', NULL, 0, 'active', NULL),
-(48, 'chelseadeseguirant630@gmail.com', '$2a$10$ycWeIQ8PoppWaGXO39rmneyFZIGC2g4IR6gkAjDCEK5Vj8yUee3wi', 'j5dfb', 'Chelsea ', 'DeSeguirant ', '3608541739', 'United States', 'active', 'none', 0, '2025-04-13 01:25:10', '172.56.105.154', 0.00, 0.00, 400.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, '2025-04-11 19:56:49', '2025-04-13 01:25:10', NULL, 0, 'active', NULL),
-(49, 'precious.temple@icloud.com', '$2a$10$xJjspjjFUHsb1BLpIcECzOVrMglH4vNnUIqoPXn4k6JbjMjewPsfi', 'qs6b8', 'Temple', 'Precious', '0813247116', 'Nigeria', 'active', 'none', 0, '2025-04-11 21:41:02', '102.90.101.117', 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, '2025-04-11 21:40:18', '2025-04-11 21:41:02', NULL, 0, 'active', NULL),
-(50, 'Hamdanmaltiti@gmail.com', '$2a$10$1P915ptrz5M8TjlH0GbRC.qOFfXwkBCXYnPctmRPFuDlOlzAq87D2', 'a2r30', 'Hamdan', 'Maltiti', '0551236246', 'Ghana', 'active', 'none', 0, '2025-04-12 20:57:50', '154.161.167.239', 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, '2025-04-12 20:55:44', '2025-04-12 20:57:50', NULL, 0, 'active', NULL);
+ALTER TABLE `users` ADD COLUMN `is_admin` tinyint(1) NOT NULL DEFAULT 0;
+
+INSERT INTO `users` (`id`, `email`, `password`, `username`, `first_name`, `last_name`, `phone_number`, `country`, `status`, `kyc_status`, `two_factor_enabled`, `last_login`, `login_ip`, `btc_balance`, `eth_balance`, `usdt_balance`, `bnb_balance`, `xrp_balance`, `ada_balance`, `doge_balance`, `sol_balance`, `dot_balance`, `matic_balance`, `link_balance`, `uni_balance`, `avax_balance`, `ltc_balance`, `shib_balance`, `created_at`, `updated_at`, `is_admin`, `otp_status`, `otp_code`) VALUES
+(2, 'investorhonour@gmail.com', '$2a$10$UW7e512K1sFfFDBAe/nK8.jp8PNUqflHqTFJqePHuBAJ0XFXVb4NO', 'd74ez', 'Carl', 'Honour', '9163169949', 'United Kingdom', 'active', 'verified', 0, '2025-04-12 10:26:54', '102.90.82.216', 658.36, 33.00, 117081.15, 0.00, 0.00, NULL, NULL, NULL, 0.00, 0.00, 0.00, 0.00, 900.00, 0.00, 0.00, '2025-02-09 04:24:14', '2025-04-12 10:26:54', 0, 'active', NULL),
+(3, 'iamvictor2nice@gmail.com', '$2a$10$UW7e512K1sFfFDBAe/nK8.jp8PNUqflHqTFJqePHuBAJ0XFXVb4NO', 'g5lf9', 'Honour', 'Robbie', '', '', 'active', 'pending', 0, '2025-04-12 10:46:58', '102.90.79.72', 595.05, 22.00, 10000.00, 0.00, 0.00, 50.00, 950.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, '2025-02-10 00:01:57', '2025-04-12 10:46:58', 1, 'active', NULL),
+(40, 'victorodogu5@gmail.com', '$2a$10$RwSYzmcb9tS1zSqN8FVCvuN67dh0/m8ZN4gRTq0EOGJcan.RsSRQG', 'akvqe', 'Jodie ', 'Sweetin', '08160580299', 'Nigeria', 'active', 'none', 0, '2025-04-12 04:16:46', '102.90.82.138', 5400.00, 0.00, 200.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, '2025-03-25 22:16:45', '2025-04-12 04:16:46', 0, 'active', NULL),
+(41, 'maureli98@yahoo.com', '$2a$10$/dTf2wfOSz58KT.7ULFPaeIsm5c/xBqCQ0LacgdrlmuEPbyRdYMdC', 'o7rkj', 'Michael', 'Aureli', '5862229782', 'United States', 'active', 'none', 0, '2025-03-31 15:24:58', '76.139.155.49', 0.00, 0.00, 200.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, '2025-03-31 15:16:47', '2025-03-31 15:24:58', 0, 'active', NULL),
+(42, 'yhbkscieew@cmhvzylmfc.com', '$2a$10$Y36J7PRTW4dfeFlBbJEFPeUzE1AeDyITgKPplMhhBlGg5S0s1xmbu', 'm11cv', 'SAMEER', 'VFBGBG', '09898787656', 'India', 'active', 'none', 0, '2025-04-07 18:07:16', '223.185.26.192', 0.00, 0.00, 200.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, '2025-04-07 10:30:15', '2025-04-07 18:07:16',0, 'active', NULL),
+(44, 'birdiequeen22@gmail.com', '$2a$10$K7g1ThAoE4klgtvOADPlnu8XmS5ZubKP9bFTicT96756SuvQL1K/6', 'cey2a', 'Grace ', 'Charis ', '0916898941', 'United States', 'active', 'none', 0, '2025-04-08 19:57:35', '102.90.82.135', 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, '2025-04-08 19:57:04', '2025-04-08 19:57:35', 0, 'active', NULL),
+(45, 'ah0522575@gmail.com', '$2a$10$lFvopcxnFuRt76Ywami0cescX3GAzoHMoTPBKT27lQhgZ.IvBKhQq', 'zvv56', 'Ahmed ', 'Hassan ', '09032230211', 'Russian Federation', 'active', 'none', 0, '2025-04-09 00:51:04', '102.90.81.7', 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, '2025-04-09 00:42:51', '2025-04-09 00:51:04', 0, 'active', NULL),
+(46, 'rogergarciahernandez2@gmail.com', '$2a$10$QlNXqtMisoiXnax1mmlgpuR98lFfELMpcJimEavHN41AaOy682HBW', '0pxox', 'Yudileidis ', 'Martines Suarez ', '50241901', 'Cuba', 'active', 'none', 0, '2025-04-10 04:53:20', '152.206.186.218', 0.00, 0.00, 200.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, '2025-04-09 20:21:01', '2025-04-10 04:53:20', 0, 'pending', '762865'),
+(47, 'abrahamkolawole222@gmail.com', '$2a$10$Y2CL8zDNSr3sEL0/pLkhjuTm2XZtzmK6G6VDMYUbA3rSLZqFLyFM.', 'haqwt', 'Edwin', 'Rich ', '09135868248', 'Nigeria', 'active', 'none', 0, '2025-04-10 17:31:35', '102.89.44.53', 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, '2025-04-10 17:31:10', '2025-04-10 17:31:35', 0, 'active', NULL),
+(48, 'chelseadeseguirant630@gmail.com', '$2a$10$ycWeIQ8PoppWaGXO39rmneyFZIGC2g4IR6gkAjDCEK5Vj8yUee3wi', 'j5dfb', 'Chelsea ', 'DeSeguirant ', '3608541739', 'United States', 'active', 'none', 0, '2025-04-13 01:25:10', '172.56.105.154', 0.00, 0.00, 400.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, '2025-04-11 19:56:49', '2025-04-13 01:25:10', 0, 'active', NULL),
+(49, 'precious.temple@icloud.com', '$2a$10$xJjspjjFUHsb1BLpIcECzOVrMglH4vNnUIqoPXn4k6JbjMjewPsfi', 'qs6b8', 'Temple', 'Precious', '0813247116', 'Nigeria', 'active', 'none', 0, '2025-04-11 21:41:02', '102.90.101.117', 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, '2025-04-11 21:40:18', '2025-04-11 21:41:02', 0, 'active', NULL),
+(50, 'Hamdanmaltiti@gmail.com', '$2a$10$1P915ptrz5M8TjlH0GbRC.qOFfXwkBCXYnPctmRPFuDlOlzAq87D2', 'a2r30', 'Hamdan', 'Maltiti', '0551236246', 'Ghana', 'active', 'none', 0, '2025-04-12 20:57:50', '154.161.167.239', 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, '2025-04-12 20:55:44', '2025-04-12 20:57:50', 0, 'active', NULL);
 
 -- --------------------------------------------------------
 
@@ -657,7 +677,8 @@ CREATE TABLE `user_investments` (
   `end_date` datetime NOT NULL,
   `daily_roi` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`daily_roi`)),
   `auto_compound` tinyint(1) DEFAULT 0,
-  `status` enum('active','completed','cancelled') DEFAULT 'active'
+  `status` enum('active','completed','cancelled') DEFAULT 'active',
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -687,7 +708,8 @@ CREATE TABLE `user_trading_sessions` (
   `end_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `status` enum('active','completed','failed') DEFAULT NULL,
   `trading_data_url` text DEFAULT NULL,
-  `current_profit` decimal(10,2) DEFAULT 0.00
+  `current_profit` decimal(10,2) DEFAULT 0.00,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -713,7 +735,8 @@ CREATE TABLE `wallet_addresses` (
   `address` varchar(255) NOT NULL,
   `label` varchar(100) DEFAULT NULL,
   `is_default` tinyint(1) DEFAULT 0,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -744,6 +767,8 @@ INSERT INTO `wallet_addresses` (`id`, `user_id`, `currency`, `address`, `label`,
 --
 -- Indexes for table `account_info`
 --
+
+USE `defaultdb`;
 ALTER TABLE `account_info`
   ADD PRIMARY KEY (`id`),
   ADD KEY `user_id` (`user_id`);
@@ -883,8 +908,6 @@ ALTER TABLE `account_info`
 --
 -- AUTO_INCREMENT for table `account_notices`
 --
-ALTER TABLE `account_notices`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
 --
 -- AUTO_INCREMENT for table `api_keys`
@@ -943,6 +966,7 @@ ALTER TABLE `spot_transactions`
 --
 -- AUTO_INCREMENT for table `trades`
 --
+USE `defaultdb`;
 ALTER TABLE `trades`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 

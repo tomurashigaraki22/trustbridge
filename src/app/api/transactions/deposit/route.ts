@@ -24,9 +24,10 @@ export async function POST(req: Request) {
             // Create pending transaction record
             const [result] = await connection.query<ResultSetHeader>(
                 `INSERT INTO transactions 
-                (user_id, type, currency, status, amount, to_address, description) 
-                VALUES (?, 'deposit', ?, 'pending', ?, ?, ?)`,
+                (id, user_id, type, currency, status, amount, to_address, description) 
+                VALUES (?, ?, 'deposit', ?, 'pending', ?, ?, ?)`,
                 [
+                    crypto.randomUUID(),
                     decoded.userId,
                     currency,
                     amount,
