@@ -37,6 +37,7 @@ export default function AdminKYCPage() {
     useEffect(() => {
         if (!userDataLoading && !userData?.user?.is_admin) {
             router.push('/dashboard');
+            console.log('User is not an admin');
             return;
         }
 
