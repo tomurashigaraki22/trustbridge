@@ -7,6 +7,7 @@ import { OTPProvider } from "@/context/OTPContext";
 import { AccessCodeProvider } from "@/context/AccessContext";
 import Script from 'next/script';
 import { TranslateProvider } from "@/context/TranslateContext";
+import TawkToWidget from "../../TawkToComponent";
 
 const nunito = Nunito({
   subsets: ["latin"],
@@ -129,6 +130,7 @@ export default function RootLayout({
             }}
           />
         )}
+        <TawkToWidget/>
       </body>
     </html>
   );
