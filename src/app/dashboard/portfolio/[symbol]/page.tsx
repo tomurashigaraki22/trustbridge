@@ -157,7 +157,7 @@ export default function CoinDetails({ params }: CoinDetailsProps) {
     const timeFrames = ["1H", "1D", "1W", "1M", "1Y", "All"]
 
     return (
-        <div className="min-h-screen bg-[#111111] text-white pb-[5rem]">
+        <div className="min-h-screen bg-[#0A0E1C] text-white pb-[5rem]">
             <div className="flex flex-col lg:flex-row">
                 <Sidebar />
                 <div className="flex-1 ">

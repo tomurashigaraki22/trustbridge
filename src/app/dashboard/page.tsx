@@ -149,7 +149,7 @@ export default function DashboardPage() {
 
 
   return (
-    <div className="min-h-screen bg-[#111111] text-white">
+    <div className="min-h-screen bg-[#0A0E1C] text-white">
       <div className="flex flex-col lg:flex-row">
         <Sidebar />
         <div className="flex-1">
@@ -159,22 +159,21 @@ export default function DashboardPage() {
           <div className="p-4 ">
             {/* Account Balance Card */}
 
-            <div className="bg-[#1E1E1E] rounded-[1rem] md:p-[1rem]">
-              <div className="   px-6 pt-6 pb-4">
-                <div className="flex flex-col">
-                  <div className="text-sm text-gray-400">ACCOUNT BALANCE</div>
-                  <div className="text-3xl font-bold mt-2">
-                    {isLoading ? (
-                      <div className="h-8 w-48 animate-pulse rounded-md bg-gray-700/50" />
-                    ) : (
-                      showBalance
-                        ? `${totalBalance.toLocaleString("en-US", { style: "currency", currency: "USD" })}`
-                        : "$••••••••••"
-                    )}
-                  </div>
-                
-                </div>
-              </div>
+            <div className="bg-[#1E1E1E] rounded-2xl md:p-6 shadow-md border border-[#2a2a2a]">
+  <div className="px-6 pt-6 pb-4">
+    <div className="flex flex-col gap-2">
+      <div className="text-sm font-medium text-gray-400 tracking-wide">ACCOUNT BALANCE</div>
+      <div className="text-3xl font-bold text-white">
+        {isLoading ? (
+          <div className="h-8 w-48 animate-pulse rounded-md bg-gray-700/50" />
+        ) : (
+          showBalance
+            ? `${totalBalance.toLocaleString("en-US", { style: "currency", currency: "USD" })}`
+            : "$••••••••••"
+        )}
+      </div>
+    </div>
+  </div>
 
               {/* Account Stats Grid */}
               <div className="grid md:grid-cols-2 gap-4 mb-6 p-[1rem]">

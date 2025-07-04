@@ -52,7 +52,7 @@ function WatchlistContent() {
     }
 
     return (
-        <div className="min-h-screen bg-[#111111] text-white">
+        <div className="min-h-screen bg-[#0A0E1C] text-white">
             <div className="flex flex-col lg:flex-row">
                 <Sidebar />
                 <div className="flex-1 ">
@@ -134,7 +134,7 @@ function WatchlistContent() {
 export default function WatchlistPage() {
     return (
         <Suspense fallback={
-            <div className="min-h-screen bg-[#111111] text-white flex items-center justify-center">
+            <div className="min-h-screen bg-[#0A0E1C] text-white flex items-center justify-center">
                 Loading...
             </div>
         }>

@@ -49,7 +49,7 @@ export default function AccountInfoPage() {
     }, []);
 
     return (
-        <div className="min-h-screen bg-[#111111] text-white">
+        <div className="min-h-screen bg-[#0A0E1C] text-white">
             <div className="flex">
                 <Sidebar />
                 <div className="flex-1 ">

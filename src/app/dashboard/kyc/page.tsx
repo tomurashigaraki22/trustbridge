@@ -98,7 +98,7 @@ export default function KYCPage() {
     const shouldShowForm = userData?.user?.kyc_status === 'none' || userData?.user?.kyc_status === 'rejected';
 
     return (
-        <div className="min-h-screen bg-[#111111] text-white">
+        <div className="min-h-screen bg-[#0A0E1C] text-white">
             <div className="flex flex-col lg:flex-row">
                 <Sidebar />
                 <div className="flex-1 ">

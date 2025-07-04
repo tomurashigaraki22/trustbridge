@@ -47,11 +47,14 @@ export function Sidebar() {
 
             {/* Sidebar */}
             <div className={`
-                fixed   md:relative md:pt-[10rem] inset-y-0 left-0 w-[20rem]  border-r border-[#444]  bg-[#111111] z-50
+                fixed   md:relative md:pt-[10rem] inset-y-0 left-0 w-[20rem]  border-r border-[#444]  bg-[#0A0E1C] z-50
                 transform transition-transform duration-300 ease-in-out
                 ${isOpen ? 'translate-x-0' : '-translate-x-full'}
                 md:translate-x-0
             `}>
+                <div className="p-4 hidden md:flex fixed top-5 left-1">
+                    <Logo />
+                </div>
                 <div className="flex justify-between items-center p-4 md:hidden">
                     <Logo />
                     <button onClick={toggle} className="text-gray-400 hover:text-white">
@@ -59,25 +62,34 @@ export function Sidebar() {
                     </button>
                 </div>
 
-                <div className="grid grid-cols-2 w-full p-4 gap-4">
-                    {menuItems.map((item) => (
-                        <Link
-                            key={item.href}
-                            href={item.href}
-                            onClick={() => {
-                                if (window.innerWidth < 768) toggle();
-                            }}
-                            className={`aspect-square flex flex-col items-center justify-center rounded-2xl transition-all
-                                ${pathname === item.href
-                                    ? 'bg-black text-white'
-                                    : 'text-gray-400 hover:text-white hover:bg-black/30'
-                                }`}
-                        >
-                            <item.icon size={32} className="mb-2" />
-                            <span className="text-sm font-medium">{item.label}</span>
-                        </Link>
-                    ))}
-                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 px-4 py-6">
+  {menuItems.map((item) => {
+    const isActive = pathname === item.href;
+
+    return (
+      <Link
+        key={item.href}
+        href={item.href}
+        onClick={() => {
+          if (window.innerWidth < 768) toggle();
+        }}
+        className={`
+          aspect-square flex flex-col items-center justify-center rounded-2xl border-2 transition-all duration-300
+          ${isActive
+            ? 'bg-[#113D2F] border-[#22C55E] text-[#22C55E]'
+            : 'bg-[#0D2D23] border-[#1f402f] text-gray-300 hover:border-[#22C55E] hover:text-white hover:bg-[#154734]'
+          }
+        `}
+      >
+        <item.icon size={28} className="mb-2" />
+        <span className="text-sm font-medium text-center">{item.label}</span>
+      </Link>
+    );
+  })}
+</div>
+
+
             </div>
 
 

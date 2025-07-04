@@ -17,7 +17,7 @@ export function AuthLayout({ children, title, subtitle, type }: AuthLayoutProps)
     const { logout } = useAuth();
     
     return (
-        <div className="min-h-screen bg-[#111111] flex items-center justify-center p-4">
+        <div className="min-h-screen bg-[#0A0E1C] flex items-center justify-center p-4">
             <div className="absolute inset-0 bg-gradient-to-br from-[#8B5CF6]/20 via-transparent to-transparent" />
 
             <motion.div
