@@ -102,95 +102,104 @@ export default function MailPage() {
     return (
         <div className="min-h-screen bg-white text-white">
             <AdminSidebar />
-            <div className="md:ml-64 p-6">
-                <div className="max-w-4xl mx-auto">
-                    <h1 className="text-2xl font-bold mb-8">Send Mail</h1>
+<div className="md:ml-64 p-6 bg-white min-h-screen text-gray-800">
+  <div className="max-w-4xl mx-auto">
+    <h1 className="text-3xl font-bold mb-10 text-gray-900">Send Mail</h1>
 
-                    <form onSubmit={handleSubmit} className="space-y-6">
-                        <div>
-                            <label className="block text-sm font-medium text-gray-400 mb-2">
-                                Select Users
-                            </label>
-                            <Select
-                                isMulti
-                                options={users.map(user => ({
-                                    value: user,
-                                    label: `${user.username} (${user.email})`
-                                }))}
-                                onChange={(selected) => setSelectedUsers(selected.map(option => option.value))}
-                                className="text-black"
-                            />
-                        </div>
+    <form onSubmit={handleSubmit} className="space-y-8 bg-white border border-gray-200 rounded-xl p-8 shadow-sm">
 
-                        <div>
-                            <label className="block text-sm font-medium text-gray-400 mb-2">
-                                Additional Emails (comma-separated)
-                            </label>
-                            <input
-                                type="text"
-                                value={manualEmails}
-                                onChange={(e) => setManualEmails(e.target.value)}
-                                placeholder="email1@example.com, email2@example.com"
-                                className="w-full bg-[#1A1A1A] border border-gray-800 rounded-lg px-4 py-2"
-                            />
-                        </div>
+      {/* Select Users */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          Select Users
+        </label>
+        <Select
+          isMulti
+          options={users.map(user => ({
+            value: user,
+            label: `${user.username} (${user.email})`
+          }))}
+          onChange={(selected) => setSelectedUsers(selected.map(option => option.value))}
+          className="text-black"
+        />
+      </div>
 
-                        <div>
-                            <label className="block text-sm font-medium text-gray-400 mb-2">
-                                Subject
-                            </label>
-                            <input
-                                type="text"
-                                value={subject}
-                                onChange={(e) => setSubject(e.target.value)}
-                                className="w-full bg-[#1A1A1A] border border-gray-800 rounded-lg px-4 py-2"
-                                required
-                            />
-                        </div>
+      {/* Additional Emails */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          Additional Emails (comma-separated)
+        </label>
+        <input
+          type="text"
+          value={manualEmails}
+          onChange={(e) => setManualEmails(e.target.value)}
+          placeholder="email1@example.com, email2@example.com"
+          className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
 
-                        <div>
-                            <div className="flex justify-between items-center mb-2">
-                                <label className="text-sm font-medium text-gray-400">
-                                    Email Body
-                                </label>
-                                <button
-                                    type="button"
-                                    onClick={() => setShowTemplateHelp(!showTemplateHelp)}
-                                    className="text-sm text-blue-500 hover:text-blue-400"
-                                >
-                                    Show Template Variables
-                                </button>
-                            </div>
-                            {showTemplateHelp && (
-                                <div className="mb-2 p-3 bg-gray-800 rounded-lg text-sm">
-                                    Available variables:
-                                    <ul className="list-disc list-inside mt-1">
-                                        <li>{`{username} - User's username`}</li>
-                                        <li>{`{first_name} - User's first name`}</li>
-                                        <li>{`{last_name} - User's last name`}</li>
-                                    </ul>
-                                </div>
-                            )}
-                            <textarea
-                                value={body}
-                                onChange={(e) => setBody(e.target.value)}
-                                className="w-full bg-[#1A1A1A] border border-gray-800 rounded-lg px-4 py-2 h-48"
-                                required
-                            />
-                        </div>
+      {/* Subject */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          Subject
+        </label>
+        <input
+          type="text"
+          value={subject}
+          onChange={(e) => setSubject(e.target.value)}
+          className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          required
+        />
+      </div>
 
-                        <div className="flex justify-end">
-                            <button
-                                type="submit"
-                                disabled={sending}
-                                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
-                            >
-                                {sending ? 'Sending...' : 'Send Email'}
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+      {/* Email Body + Help */}
+      <div>
+        <div className="flex justify-between items-center mb-2">
+          <label className="text-sm font-medium text-gray-700">
+            Email Body
+          </label>
+          <button
+            type="button"
+            onClick={() => setShowTemplateHelp(!showTemplateHelp)}
+            className="text-sm text-blue-600 hover:text-blue-500 transition"
+          >
+            {showTemplateHelp ? 'Hide' : 'Show'} Template Variables
+          </button>
+        </div>
+
+        {showTemplateHelp && (
+          <div className="mb-3 p-4 bg-gray-100 border border-gray-200 rounded-lg text-sm text-gray-700">
+            <p className="mb-1 font-medium">Available variables:</p>
+            <ul className="list-disc list-inside space-y-1">
+              <li><code className="bg-gray-200 px-1 rounded">{'{username}'}</code> - User's username</li>
+              <li><code className="bg-gray-200 px-1 rounded">{'{first_name}'}</code> - User's first name</li>
+              <li><code className="bg-gray-200 px-1 rounded">{'{last_name}'}</code> - User's last name</li>
+            </ul>
+          </div>
+        )}
+
+        <textarea
+          value={body}
+          onChange={(e) => setBody(e.target.value)}
+          className="w-full bg-white border border-gray-300 rounded-lg px-4 py-3 h-48 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+          required
+        />
+      </div>
+
+      {/* Submit Button */}
+      <div className="flex justify-end">
+        <button
+          type="submit"
+          disabled={sending}
+          className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition"
+        >
+          {sending ? 'Sending...' : 'Send Email'}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
         </div>
     );
 }
