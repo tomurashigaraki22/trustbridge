@@ -132,98 +132,108 @@ export function InvestmentList({ investments, limit }: InvestmentListProps) {
             </div>
 
             {/* Investment Details Modal */}
-            {selectedInvestment && (() => {
-                const currentDate = new Date();
-                const startDate = new Date(selectedInvestment.start_date);
-                const daysPassed = Math.floor((currentDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
-                const dailyRoi = JSON.parse(selectedInvestment.daily_roi);
-                let cumulativePercentage = 0;
-                const initialAmount = selectedInvestment.amount_usd;
+{selectedInvestment && (() => {
+    const currentDate = new Date();
+    const startDate = new Date(selectedInvestment.start_date);
+    const daysPassed = Math.floor((currentDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+    const dailyRoi = JSON.parse(selectedInvestment.daily_roi);
+    let cumulativePercentage = 0;
+    const initialAmount = selectedInvestment.amount_usd;
 
-                for (let i = 0; i <= daysPassed && i < dailyRoi.length; i++) {
-                    cumulativePercentage += dailyRoi[i] * (i + 1);
-                }
+    for (let i = 0; i <= daysPassed && i < dailyRoi.length; i++) {
+        cumulativePercentage += dailyRoi[i] * (i + 1);
+    }
 
-                let totalAccumulatedAmount = Number(initialAmount);
+    let totalAccumulatedAmount = Number(initialAmount);
+    for (let i = 0; i <= daysPassed && i < dailyRoi.length; i++) {
+        const dailyReturn = Number(dailyRoi[i]);
+        totalAccumulatedAmount = totalAccumulatedAmount + ((totalAccumulatedAmount * dailyReturn) / 100);
+    }
 
-                for (let i = 0; i <= daysPassed && i < dailyRoi.length; i++) {
-                    const dailyReturn = Number(dailyRoi[i]);
-                    totalAccumulatedAmount = totalAccumulatedAmount + ((totalAccumulatedAmount * dailyReturn) / 100);
-                }
-                const formattedAmount = totalAccumulatedAmount.toLocaleString('en-US', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                });
-                const todayPercentage = (cumulativePercentage);
+    const formattedAmount = totalAccumulatedAmount.toLocaleString('en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
 
-                return (
-                    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
-                        <div className="bg-[#121212] rounded-[1rem] p-6 max-w-md w-full mx-4">
-                            <div className="flex justify-between items-center mb-4">
-                                <h3 className="text-xl font-semibold">{selectedInvestment.package_name}</h3>
-                                <button
-                                    onClick={() => setSelectedInvestment(null)}
-                                    className="text-black hover:text-black"
-                                >
-                                    ✕
-                                </button>
-                            </div>
-                            <div className="space-y-4">
-                                <div className="flex justify-between">
-                                    <span className="text-black">Amount</span>
-                                    <span>${selectedInvestment.amount_usd.toLocaleString()} -  {selectedInvestment.currency}</span>
-                                </div>
-                                <div className="flex justify-between">
-                                    <span className="text-black">Accumulative Profit</span>
-                                    <span>{todayPercentage} %</span>
-                                </div>
-                                <div className="flex justify-between">
-                                    <span className="text-black">Current Value</span>
-                                    <span>${formattedAmount}</span>
-                                </div>
+    const todayPercentage = cumulativePercentage;
 
-                                <div className="flex justify-between">
-                                    <span className="text-black">Duration</span>
-                                    <span>{selectedInvestment.duration_days} days</span>
-                                </div>
-                                <div className="flex justify-between">
-                                    <span className="text-black">ROI Range</span>
-                                    <span className="text-green-500">{selectedInvestment.min_roi}% - {selectedInvestment.max_roi}%</span>
-                                </div>
-                                <div className="flex justify-between">
-                                    <span className="text-black">Auto-compound</span>
-                                    <span>{selectedInvestment.auto_compound ? 'Yes' : 'No'}</span>
-                                </div>
-                                <div className="flex justify-between">
-                                    <span className="text-black">Start Date</span>
-                                    <span>{new Date(selectedInvestment.start_date).toLocaleDateString()}</span>
-                                </div>
-                                <div className="flex justify-between">
-                                    <span className="text-black">End Date</span>
-                                    <span>{new Date(selectedInvestment.end_date).toLocaleDateString()}</span>
-                                </div>
-                                {selectedInvestment.status !== 'completed' && daysPassed >= dailyRoi.length && (
-                                    <button
-                                        onClick={() => handleClaimProfit(selectedInvestment.id)}
-                                        className="w-full bg-green-500 hover:bg-green-600 text-black py-2 rounded-lg mt-4"
-                                    >
-                                        Claim Profit
-                                    </button>
-                                )
-                                }
+    return (
+        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center">
+            <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8 max-w-md w-full mx-4 relative">
+                <button
+                    onClick={() => setSelectedInvestment(null)}
+                    className="absolute top-4 right-4 text-gray-500 hover:text-red-500 transition-colors text-lg font-bold"
+                >
+                    &times;
+                </button>
 
-                                {
-                                    selectedInvestment.status === 'completed' && (
-                                        <div className="w-full text-center bg-gray-700 text-black py-2 rounded-lg mt-4">
-                                            Investment Completed
-                                        </div>
-                                    )
-                                }
-                            </div>
-                        </div>
+                <h3 className="text-2xl font-semibold text-gray-800 mb-6">
+                    {selectedInvestment.package_name}
+                </h3>
+
+                <div className="space-y-4 text-sm text-gray-700">
+                    <div className="flex justify-between">
+                        <span>Amount</span>
+                        <span className="font-medium">${selectedInvestment.amount_usd.toLocaleString()} - {selectedInvestment.currency}</span>
                     </div>
-                );
-            })()}
+
+                    <div className="flex justify-between">
+                        <span>Accumulative Profit</span>
+                        <span className="font-medium">{todayPercentage.toFixed(2)}%</span>
+                    </div>
+
+                    <div className="flex justify-between">
+                        <span>Current Value</span>
+                        <span className="font-medium">${formattedAmount}</span>
+                    </div>
+
+                    <div className="flex justify-between">
+                        <span>Duration</span>
+                        <span>{selectedInvestment.duration_days} days</span>
+                    </div>
+
+                    <div className="flex justify-between">
+                        <span>ROI Range</span>
+                        <span className="text-green-600 font-medium">
+                            {selectedInvestment.min_roi}% - {selectedInvestment.max_roi}%
+                        </span>
+                    </div>
+
+                    <div className="flex justify-between">
+                        <span>Auto-compound</span>
+                        <span>{selectedInvestment.auto_compound ? 'Yes' : 'No'}</span>
+                    </div>
+
+                    <div className="flex justify-between">
+                        <span>Start Date</span>
+                        <span>{new Date(selectedInvestment.start_date).toLocaleDateString()}</span>
+                    </div>
+
+                    <div className="flex justify-between">
+                        <span>End Date</span>
+                        <span>{new Date(selectedInvestment.end_date).toLocaleDateString()}</span>
+                    </div>
+                </div>
+
+                {selectedInvestment.status !== 'completed' && daysPassed >= dailyRoi.length && (
+                    <button
+                        onClick={() => handleClaimProfit(selectedInvestment.id)}
+                        className="mt-6 w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-lg transition-colors"
+                    >
+                        Claim Profit
+                    </button>
+                )}
+
+                {selectedInvestment.status === 'completed' && (
+                    <div className="mt-6 w-full text-center bg-gray-100 text-gray-600 font-medium py-3 rounded-lg">
+                        Investment Completed
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+})()}
+
         </>
     );
 }
