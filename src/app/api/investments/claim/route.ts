@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import pool from "@/lib/db";
 import { headers } from "next/headers";
+import { generateRandom9DigitInteger } from "../../../../../scripts/generateId";
 import jwt from "jsonwebtoken";
 import { RowDataPacket } from 'mysql2';
 
@@ -68,13 +69,15 @@ export async function POST(req: Request) {
                 `UPDATE users SET ${balanceColumn} = ${balanceColumn} + ? WHERE id = ?`,
                 [profit, decoded.userId]
             );
+            const id = generateRandom9DigitInteger();
 
             // Create notice
             await connection.query(
                 `INSERT INTO account_notices 
-    (user_id, type, title, message) 
-    VALUES (?, 'transaction', ?, ?)`,
+    (id, user_id, type, title, message) 
+    VALUES (?, ?, 'transaction', ?, ?)`,
                 [
+                    id,
                     decoded.userId,
                     'Transaction Successful',
                     `Claimed Profit of $${profit} from ${investment.package_name} investment`

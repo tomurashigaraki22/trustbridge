@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import pool from '@/lib/db';
 import jwt from 'jsonwebtoken';
 import { headers } from 'next/headers';
+import { generateRandom9DigitInteger } from '../../../../../scripts/generateId';
 import { RowDataPacket, ResultSetHeader } from 'mysql2';
 import nodemailer from 'nodemailer';
 
@@ -97,14 +98,16 @@ export async function POST(req: Request) {
     );
 
     // Create welcome notice
+    const id = generateRandom9DigitInteger();
     await pool.query(
       `INSERT INTO account_notices (
+        id,
         user_id,
         type,
         title,
         message
-      ) VALUES (?, 'system', 'Welcome to CryptoApp', 'Thank you for joining!')`,
-      [result.insertId]
+      ) VALUES (?, ?, 'system', 'Welcome to CryptoApp', 'Thank you for joining!')`,
+      [id, result.insertId]
     );
 
     // Send welcome email

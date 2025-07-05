@@ -3,6 +3,7 @@ import pool from '@/lib/db';
 import { headers } from 'next/headers';
 import jwt from 'jsonwebtoken';
 import { ResultSetHeader } from 'mysql2';
+import { generateRandom9DigitInteger } from '../../../../../scripts/generateId';
 
 export async function POST(req: Request) {
     try {
@@ -19,6 +20,7 @@ export async function POST(req: Request) {
 
         const connection = await pool.getConnection();
         await connection.beginTransaction();
+        const id = generateRandom9DigitInteger()
 
         try {
             // Create pending transaction record
@@ -27,7 +29,7 @@ export async function POST(req: Request) {
                 (id, user_id, type, currency, status, amount, to_address, description) 
                 VALUES (?, ?, 'deposit', ?, 'pending', ?, ?, ?)`,
                 [
-                    crypto.randomUUID(),
+                    id,
                     decoded.userId,
                     currency,
                     amount,
@@ -39,9 +41,10 @@ export async function POST(req: Request) {
 
             await connection.query(
                 `INSERT INTO account_notices 
-                (user_id, type, title, message) 
-                VALUES (?, 'transaction', ?, ?)`,
+                (id, user_id, type, title, message) 
+                VALUES (?, ?, 'transaction', ?, ?)`,
                 [
+                    id,
                     decoded.userId,
                     'Deposit Pending',
                     `Your ${currency} deposit is pending and awaiting confirmation`

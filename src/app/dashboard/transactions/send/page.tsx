@@ -212,7 +212,7 @@ export default function SendPage({ searchParams }: { searchParams: Promise<{ sym
     };
 
     return (
-        <div className="min-h-screen bg-[#0A0E1C] text-white pb-[5rem]">
+        <div className="min-h-screen bg-white text-white pb-[5rem]">
             <Toaster />
             <div className="flex flex-col lg:flex-row">
                 <Sidebar />

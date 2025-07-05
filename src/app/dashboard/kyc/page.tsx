@@ -98,93 +98,94 @@ export default function KYCPage() {
     const shouldShowForm = userData?.user?.kyc_status === 'none' || userData?.user?.kyc_status === 'rejected';
 
     return (
-        <div className="min-h-screen bg-[#0A0E1C] text-white">
+        <div className="min-h-screen bg-white text-white">
             <div className="flex flex-col lg:flex-row">
                 <Sidebar />
                 <div className="flex-1 ">
                     <TopBar title="KYC Verification" />
-                    <div className="p-4 lg:p-8">
-                        <div className="max-w-7xl mx-auto bg-[#121212] rounded-[1rem] p-6">
-                            <h2 className="text-2xl font-semibold mb-6">KYC Verification</h2>
+<div className="p-4 lg:p-8 bg-white min-h-screen">
+    <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg p-6 md:p-10 border border-gray-200">
+        <h2 className="text-2xl md:text-3xl font-semibold text-gray-800 mb-6">KYC Verification</h2>
 
-                            {renderKYCStatus()}
+        {renderKYCStatus()}
 
-                            {shouldShowForm ? (
-                                <>
-                                    {error && (
-                                        <div className="mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/50 text-red-500">
-                                            {error}
-                                        </div>
-                                    )}
-
-                                    <form onSubmit={handleSubmit} className="space-y-6">
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-300 mb-1.5">
-                                                Document Type
-                                            </label>
-                                            <select
-                                                value={documentType}
-                                                onChange={(e) => setDocumentType(e.target.value)}
-                                                className="w-full bg-[#1A1A1A] border border-[#333] rounded-lg px-4 py-2.5"
-                                                required
-                                            >
-                                                {Object.entries(DOCUMENT_TYPES).map(([value, label]) => (
-                                                    <option key={value} value={value}>{label}</option>
-                                                ))}
-                                            </select>
-                                        </div>
-
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-300 mb-1.5">
-                                                Document Number
-                                            </label>
-                                            <input
-                                                type="text"
-                                                value={documentNumber}
-                                                onChange={(e) => setDocumentNumber(e.target.value)}
-                                                className="w-full bg-[#1A1A1A] border border-[#333] rounded-lg px-4 py-2.5"
-                                                required
-                                            />
-                                        </div>
-
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-300 mb-1.5">
-                                                Front of Document
-                                            </label>
-                                            <input
-                                                type="file"
-                                                accept="image/*"
-                                                onChange={(e) => setFrontFile(e.target.files?.[0] || null)}
-                                                className="w-full bg-[#1A1A1A] border border-[#333] rounded-lg px-4 py-2.5"
-                                                required
-                                            />
-                                        </div>
-
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-300 mb-1.5">
-                                                Back of Document
-                                            </label>
-                                            <input
-                                                type="file"
-                                                accept="image/*"
-                                                onChange={(e) => setBackFile(e.target.files?.[0] || null)}
-                                                className="w-full bg-[#1A1A1A] border border-[#333] rounded-lg px-4 py-2.5"
-                                                required
-                                            />
-                                        </div>
-
-                                        <Button
-                                            type="submit"
-                                            disabled={isLoading}
-                                            className="w-full"
-                                        >
-                                            {isLoading ? 'Submitting...' : 'Submit KYC Documents'}
-                                        </Button>
-                                    </form>
-                                </>
-                            ) : null}
-                        </div>
+        {shouldShowForm && (
+            <>
+                {error && (
+                    <div className="mb-4 p-4 rounded-lg bg-red-100 border border-red-300 text-red-600 text-sm font-medium">
+                        {error}
                     </div>
+                )}
+
+                <form onSubmit={handleSubmit} className="space-y-6">
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                            Document Type
+                        </label>
+                        <select
+                            value={documentType}
+                            onChange={(e) => setDocumentType(e.target.value)}
+                            className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2.5 text-gray-800 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                            required
+                        >
+                            {Object.entries(DOCUMENT_TYPES).map(([value, label]) => (
+                                <option key={value} value={value}>{label}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                            Document Number
+                        </label>
+                        <input
+                            type="text"
+                            value={documentNumber}
+                            onChange={(e) => setDocumentNumber(e.target.value)}
+                            className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2.5 text-gray-800 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                            required
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                            Front of Document
+                        </label>
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => setFrontFile(e.target.files?.[0] || null)}
+                            className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-gray-800 bg-gray-50 file:mr-4 file:py-2 file:px-4 file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                            required
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                            Back of Document
+                        </label>
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => setBackFile(e.target.files?.[0] || null)}
+                            className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-gray-800 bg-gray-50 file:mr-4 file:py-2 file:px-4 file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                            required
+                        />
+                    </div>
+
+                    <Button
+                        type="submit"
+                        disabled={isLoading}
+                        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm py-3 rounded-lg transition-colors"
+                    >
+                        {isLoading ? 'Submitting...' : 'Submit KYC Documents'}
+                    </Button>
+                </form>
+            </>
+        )}
+    </div>
+</div>
+
                 </div>
             </div>
         </div>

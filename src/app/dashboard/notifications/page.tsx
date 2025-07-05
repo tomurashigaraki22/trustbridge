@@ -43,7 +43,7 @@ export default function NotificationsPage() {
     }
 
     return (
-        <div className="min-h-screen bg-[#0A0E1C] text-white">
+        <div className="min-h-screen bg-white text-white">
             <div className="flex flex-col lg:flex-row">
                 <Sidebar />
                 <div className="flex-1 ">

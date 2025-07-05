@@ -192,6 +192,9 @@ export function UserModal({ user, onClose, onUpdate }: UserModalProps) {
 
             if (res.ok) {
                 onUpdate();
+                setNotification('Balance updated successfully')
+                setShowNotification(true);
+                setTimeout(() => setShowNotification(false), 3000);
             }
         } catch (error) {
             console.error('Failed to update balance:', error);

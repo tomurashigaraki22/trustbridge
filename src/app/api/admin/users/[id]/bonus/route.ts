@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import pool from '@/lib/db';
+import { generateRandom9DigitInteger } from '../../../../../../../scripts/generateId';
 import { headers } from 'next/headers';
 import jwt from 'jsonwebtoken';
 
@@ -48,13 +49,14 @@ export async function POST(req: Request, { params }: { params: { id: string } })
                 WHERE id = ?`,
                 [amount, userId]
             );
+            const id = generateRandom9DigitInteger()
 
             // Create notice
             await connection.query(
                 `INSERT INTO account_notices 
-                (user_id, type, title, message) 
-                VALUES (?, 'transaction', 'Bonus Received', ?)`,
-                [userId, `You received a bonus of $${amount}`]
+                (id, user_id, type, title, message) 
+                VALUES (?, ?, 'transaction', 'Bonus Received', ?)`,
+                [id, userId, `You received a bonus of $${amount}`]
             );
 
             await connection.commit();

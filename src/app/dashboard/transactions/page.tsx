@@ -33,7 +33,7 @@ export default function DashboardPage() {
 
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A] text-white pb-[5rem]">
+    <div className="min-h-screen bg-[#fff] text-white pb-[5rem]">
       <div className="flex flex-col lg:flex-row">
         <Sidebar />
         <div className="flex-1 ">

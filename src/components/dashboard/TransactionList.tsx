@@ -85,148 +85,200 @@ export function TransactionList({ transactions, number }: TransactionListProps) 
     }
 
     return (
-        <div >
-            <div className="flex gap-2 mb-4">
-                <button
-                    onClick={() => setActiveType(activeType === 'deposit' ? null : 'deposit')}
-                    className={`px-4 py-2 rounded-lg transition-colors ${activeType === 'deposit'
-                            ? 'bg-green-500 text-white'
-                            : 'bg-[#1E1E1E] text-gray-400 hover:bg-[#2E2E2E]'
-                        }`}
-                >
-                    Deposit
-                </button>
-                <button
-                    onClick={() => setActiveType(activeType === 'withdrawal' ? null : 'withdrawal')}
-                    className={`px-4 py-2 rounded-lg transition-colors ${activeType === 'withdrawal'
-                            ? 'bg-red-500 text-white'
-                            : 'bg-[#1E1E1E] text-gray-400 hover:bg-[#2E2E2E]'
-                        }`}
-                >
-                    Withdrawal
-                </button>
-            </div>
+<div>
+    {/* Toggle Buttons */}
+    <div className="flex gap-3 mb-6">
+        <button
+            onClick={() => setActiveType(activeType === 'deposit' ? null : 'deposit')}
+            className={`px-5 py-2 rounded-lg font-medium transition-colors duration-200 shadow-sm border ${
+                activeType === 'deposit'
+                    ? 'bg-green-500 text-black border-green-500'
+                    : 'bg-white text-black hover:bg-[#2E2E2E] hover:text-white border-gray-300'
+            }`}
+        >
+            Deposit
+        </button>
+        <button
+            onClick={() => setActiveType(activeType === 'withdrawal' ? null : 'withdrawal')}
+            className={`px-5 py-2 rounded-lg font-medium transition-colors duration-200 shadow-sm border ${
+                activeType === 'withdrawal'
+                    ? 'bg-red-500 text-black border-red-500'
+                    : 'bg-white text-black hover:bg-[#2E2E2E] hover:text-white border-gray-300'
+            }`}
+        >
+            Withdrawal
+        </button>
+    </div>
 
-            <div className="space-y-2 cursor-pointer border-t border-[#444]">
-                {displayedTransactions.map((tx) => (
+    {/* Transaction List */}
+    <div className="space-y-3 border-t border-[#444] pt-4">
+        {displayedTransactions.map((tx) => (
+            <div
+                key={tx.id}
+                onClick={() => setSelectedTx(tx)}
+                className="flex items-center justify-between rounded-xl bg-white p-4 group hover:bg-[#1A1A1A] transition-colors duration-200 shadow-sm cursor-pointer"
+            >
+                <div className="flex items-center gap-4">
                     <div
-                        key={tx.id}
-                        onClick={() => setSelectedTx(tx)}
-                        className="flex items-center  justify-between rounded-lg bg-[#121212] p-4 cursor-pointer hover:bg-[#1A1A1A] transition-colors"
+                        className={`p-2 rounded-lg ${
+                            tx.status === 'completed'
+                                ? 'bg-green-500/20'
+                                : tx.status === 'pending'
+                                ? 'bg-orange-500/20'
+                                : 'bg-red-500/20'
+                        }`}
                     >
-                        <div className="flex items-center gap-4">
-                            <div className={`rounded-lg ${tx.status === "completed" ? "bg-green-500/20" : tx.status === "pending" ? "bg-orange-500/20" : "bg-red-500/20"} p-2`}>
-                                {tx.status === "completed" ? (
-                                    <ArrowUp className="h-5 w-5 text-green-500" />
-                                ) : tx.status === "pending" ? (
-                                    <ArrowDown className="h-5 w-5 text-orange-500" />
+                        {tx.status === 'completed' ? (
+                            <ArrowUp className="h-5 w-5 text-green-500" />
+                        ) : tx.status === 'pending' ? (
+                            <ArrowDown className="h-5 w-5 text-orange-500" />
+                        ) : (
+                            <ArrowDown className="h-5 w-5 text-red-500" />
+                        )}
+                    </div>
+                    <div>
+                        <div className="text-sm font-semibold text-black group-hover:text-white capitalize">
+                            {tx.type} - {tx.description}
+                        </div>
+                        <div className="text-xs text-black group-hover:text-white">
+                            {formatDate(tx.created_at)}
+                        </div>
+                    </div>
+                </div>
+                <div className="flex flex-col items-end text-right gap-1">
+                    <div
+                        className={`text-sm font-semibold ${
+                            tx.status === 'completed'
+                                ? 'text-green-500'
+                                : tx.status === 'pending'
+                                ? 'text-orange-500'
+                                : 'text-red-500'
+                        }`}
+                    >
+                        {Number(tx.amount) === 0
+                            ? ''
+                            : `$${Number(tx.amount).toLocaleString('en-US', {
+                                  minimumFractionDigits: 2,
+                                  maximumFractionDigits: 2,
+                              })}`}
+                    </div>
+                    <div
+                        className={`rounded-full px-3 py-1 text-xs font-medium capitalize ${
+                            tx.status === 'completed'
+                                ? 'bg-green-500/20 text-green-500'
+                                : tx.status === 'pending'
+                                ? 'bg-orange-500/20 text-orange-500'
+                                : 'bg-red-500/20 text-red-500'
+                        }`}
+                    >
+                        {tx.status}
+                    </div>
+                </div>
+            </div>
+        ))}
+
+        {/* Receipt Modal */}
+        {selectedTx && (
+            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+                <div className="bg-[#121212] rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-xl">
+                    <div id="transaction-receipt" className="p-6 space-y-6">
+                        <div className="text-center">
+                            <div
+                                className={`w-12 h-12 mx-auto mb-4 flex items-center justify-center rounded-full ${
+                                    selectedTx.status === 'completed'
+                                        ? 'bg-green-500/20'
+                                        : selectedTx.status === 'pending'
+                                        ? 'bg-orange-500/20'
+                                        : 'bg-red-500/20'
+                                }`}
+                            >
+                                {selectedTx.status === 'completed' ? (
+                                    <ArrowUp className="h-6 w-6 text-green-500" />
+                                ) : selectedTx.status === 'pending' ? (
+                                    <ArrowDown className="h-6 w-6 text-orange-500" />
                                 ) : (
-                                    <ArrowDown className="h-5 w-5 text-red-500" />
+                                    <ArrowDown className="h-6 w-6 text-red-500" />
                                 )}
                             </div>
-                            <div>
-                                <div className="font-medium text-sm">{tx.type} - {tx.description}</div>
-                                <div className="text-sm text-gray-400">{formatDate(tx.created_at)}</div>
+                            <h3 className="text-xl font-bold text-white mb-1">{selectedTx.type}</h3>
+                            <div className="text-2xl font-bold text-white mb-2">
+                                ${Number(selectedTx.amount).toLocaleString('en-US', {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2,
+                                })}
                             </div>
-                        </div>
-                        <div className="text-right flex flex-col">
-                            <div className={`${tx.status === "completed" ? "text-green-500" : tx.status === "pending" ? "text-orange-500" : "text-red-500"}`}>
-                                {Number(tx.amount) === 0 ? '' : '$' + Number(tx.amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                            </div>
-                            <div className="flex flex-col justify-end items-end">
-                                <div className={`md:flex rounded-full text-end px-3 py-1 text-xs ${tx.status === "completed" ? "bg-green-500/20" : tx.status === "pending" ? "bg-orange-500/20" : "bg-red-500/20"}`}>
-                                    {tx.status}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                ))}
-
-                {selectedTx && (
-                    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-                        <div className="bg-[#121212] rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
-                            <div id="transaction-receipt" className="p-6 space-y-6">
-                                <div className="text-center">
-                                    <div className={`mx-auto w-12 h-12 rounded-full flex items-center justify-center mb-4 ${selectedTx.status === "completed" ? "bg-green-500/20" : selectedTx.status === "pending" ? "bg-orange-500/20" : "bg-red-500/20"}`}>
-                                        {selectedTx.status === "completed" ? (
-                                            <ArrowUp className="h-6 w-6 text-green-500" />
-                                        ) : selectedTx.status === "pending" ? (
-                                            <ArrowDown className="h-6 w-6 text-orange-500" />
-                                        ) : (
-                                            <ArrowDown className="h-6 w-6 text-red-500" />
-                                        )}
-                                    </div>
-                                    <h3 className="text-xl font-bold mb-1">{selectedTx.type}</h3>
-                                    <div className="text-2xl font-bold mb-2">
-                                        ${Number(selectedTx.amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                                    </div>
-                                    <div className="flex justify-center">
-                                        <div className={`inline-flex items-center justify-center h-7 rounded-full px-4 text-sm font-medium ${selectedTx.status === "completed"
-                                            ? "bg-green-500/20 text-green-500"
-                                            : selectedTx.status === "pending"
-                                                ? "bg-orange-500/20 text-orange-500"
-                                                : "bg-red-500/20 text-red-500"
-                                            }`} data-status-badge>
-                                            {selectedTx.status}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="space-y-4 border-t border-b border-gray-800 py-4">
-                                    <div className="flex justify-between">
-                                        <span className="text-gray-400">Date</span>
-                                        <span>{formatDate(selectedTx.created_at)}</span>
-                                    </div>
-                                    {selectedTx.tx_hash && (
-                                        <div className="flex justify-between">
-                                            <span className="text-gray-400">Transaction Hash</span>
-                                            <span className="text-sm font-mono">{selectedTx.tx_hash}</span>
-                                        </div>
-                                    )}
-                                    {selectedTx.from_address && (
-                                        <div className="flex justify-between">
-                                            <span className="text-gray-400">From</span>
-                                            <span className="text-sm font-mono">{selectedTx.from_address}</span>
-                                        </div>
-                                    )}
-                                    {selectedTx.to_address && (
-                                        <div className="flex justify-between">
-                                            <span className="text-gray-400">To</span>
-                                            <span className="text-sm font-mono">{selectedTx.to_address}</span>
-                                        </div>
-                                    )}
-                                    {selectedTx.fee && (
-                                        <div className="flex justify-between">
-                                            <span className="text-gray-400">Fee</span>
-                                            <span>${selectedTx.fee}</span>
-                                        </div>
-                                    )}
-                                </div>
-
-                                <div className="text-sm text-gray-400">
-                                    {selectedTx.description}
-                                </div>
-                            </div>
-
-                            <div className="border-t border-gray-800 p-4 flex justify-end gap-4">
-                                <button
-                                    onClick={downloadReceipt}
-                                    className="flex items-center gap-2 bg-purple-500 hover:bg-purple-600 px-4 py-2 rounded-lg transition-colors"
+                            <div className="flex justify-center">
+                                <div
+                                    className={`inline-flex h-7 items-center justify-center rounded-full px-4 text-sm font-medium capitalize ${
+                                        selectedTx.status === 'completed'
+                                            ? 'bg-green-500/20 text-green-500'
+                                            : selectedTx.status === 'pending'
+                                            ? 'bg-orange-500/20 text-orange-500'
+                                            : 'bg-red-500/20 text-red-500'
+                                    }`}
                                 >
-                                    <Download className="h-4 w-4" />
-                                    Download Receipt
-                                </button>
-                                <button
-                                    onClick={() => setSelectedTx(null)}
-                                    className="px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors"
-                                >
-                                    Close
-                                </button>
+                                    {selectedTx.status}
+                                </div>
                             </div>
                         </div>
+
+                        {/* Transaction Details */}
+                        <div className="space-y-4 border-t border-b border-gray-700 py-4 text-sm text-white">
+                            <div className="flex justify-between">
+                                <span className="text-gray-400">Date</span>
+                                <span>{formatDate(selectedTx.created_at)}</span>
+                            </div>
+                            {selectedTx.tx_hash && (
+                                <div className="flex justify-between">
+                                    <span className="text-gray-400">Transaction Hash</span>
+                                    <span className="font-mono text-xs">{selectedTx.tx_hash}</span>
+                                </div>
+                            )}
+                            {selectedTx.from_address && (
+                                <div className="flex justify-between">
+                                    <span className="text-gray-400">From</span>
+                                    <span className="font-mono text-xs">{selectedTx.from_address}</span>
+                                </div>
+                            )}
+                            {selectedTx.to_address && (
+                                <div className="flex justify-between">
+                                    <span className="text-gray-400">To</span>
+                                    <span className="font-mono text-xs">{selectedTx.to_address}</span>
+                                </div>
+                            )}
+                            {selectedTx.fee && (
+                                <div className="flex justify-between">
+                                    <span className="text-gray-400">Fee</span>
+                                    <span>${selectedTx.fee}</span>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Description */}
+                        <div className="text-sm text-gray-300">{selectedTx.description}</div>
                     </div>
-                )}
+
+                    {/* Modal Actions */}
+                    <div className="border-t border-gray-700 p-4 flex justify-end gap-3">
+                        <button
+                            onClick={downloadReceipt}
+                            className="flex items-center gap-2 bg-purple-500 hover:bg-purple-600 px-4 py-2 rounded-lg text-white text-sm font-medium transition-colors"
+                        >
+                            <Download className="h-4 w-4" />
+                            Download Receipt
+                        </button>
+                        <button
+                            onClick={() => setSelectedTx(null)}
+                            className="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-lg text-sm font-medium transition-colors"
+                        >
+                            Close
+                        </button>
+                    </div>
+                </div>
             </div>
-        </div>
+        )}
+    </div>
+</div>
+
     )
 }

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import pool from "@/lib/db";
 import { headers } from "next/headers";
+import { generateRandom9DigitInteger } from "../../../../../../scripts/generateId";
 import jwt from "jsonwebtoken";
 
 export async function POST(req: Request) {
@@ -34,15 +35,17 @@ export async function POST(req: Request) {
                 [userId, priority, title, message]
             );
 
+            const id = generateRandom9DigitInteger();
             // Insert into account_notices
             await connection.query(
                 `INSERT INTO account_notices (
+                    id,
                     user_id,
                     type,
                     title,
                     message
-                ) VALUES (?, ?, ?, ?)`,
-                [userId, priority === 'urgent' ? 'security' : 'info', title, message]
+                ) VALUES (?, ?, ?, ?, ?)`,
+                [id, userId, priority === 'urgent' ? 'security' : 'info', title, message]
             );
 
             return NextResponse.json({

@@ -152,13 +152,13 @@ function EditInvestmentPackageClient({ id }: { id: string }) {
     };
 
     if (loading) {
-        return <div className="min-h-screen bg-[#0A0E1C] text-white flex items-center justify-center">
+        return <div className="min-h-screen bg-white text-white flex items-center justify-center">
             Loading...
         </div>;
     }
 
     return (
-        <div className="min-h-screen bg-[#0A0E1C] text-white">
+        <div className="min-h-screen bg-white text-white">
             <AdminSidebar />
             <div className="md:ml-64 p-6">
                 <div className="max-w-3xl mx-auto">

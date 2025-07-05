@@ -102,6 +102,7 @@ export function useUserData() {
   };
 
   const fetchUserData = async () => {
+    console.log("MAIN")
     try {
       const token = Cookies.get('auth-token');
       if (!token) return;
@@ -115,6 +116,7 @@ export function useUserData() {
       if (!response.ok) throw new Error('Failed to fetch user data');
 
       const data = await response.json();
+      console.log("Data: ", data)
       // console.log('fetched user data')
       setUserData(data);
       setTotalBalance(calculateTotalBalance(data));

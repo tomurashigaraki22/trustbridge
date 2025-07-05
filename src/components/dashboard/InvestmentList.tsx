@@ -80,30 +80,52 @@ export function InvestmentList({ investments, limit }: InvestmentListProps) {
 
                     return (
                         <div
-                            key={investment.id}
-                            className="bg-[#1A1A1A] p-4 rounded-lg cursor-pointer hover:bg-[#242424] transition-colors"
-                            onClick={() => {
-                                setSelectedInvestment(investment)
-                                setPackage(investment?.package_name)
-                                setProfit(parseFloat(totalAccumulatedAmount.toFixed(2)))
-                            }}
+                        key={investment.id}
+                        className="bg-white rounded-xl p-5 shadow-sm group cursor-pointer transition-colors duration-300 hover:bg-gray-900"
+                        onClick={() => {
+                            setSelectedInvestment(investment);
+                            setPackage(investment?.package_name);
+                            setProfit(parseFloat(totalAccumulatedAmount.toFixed(2)));
+                        }}
                         >
-                            <div className="flex justify-between items-start mb-2">
-                                <div>
-                                    <h3 className="font-medium">{investment.package_name}</h3>
-                                    <p className="text-sm text-gray-400">
-                                        ${investment.amount_usd.toLocaleString()} - ({investment.currency})
-                                    </p>
-                                </div>
-                                <div className="text-green-500">
-                                    {investment.status == 'completed' ? "Claimed" : investment.status == "cancelled" ? "Cancelled" : currentStage}
-                                </div>
+                        <div className="flex justify-between items-start mb-3">
+                            <div>
+                            <h3 className="text-lg font-semibold text-black group-hover:text-white capitalize">
+                                {investment.package_name}
+                            </h3>
+                            <p className="text-sm text-gray-600 group-hover:text-gray-200">
+                                ${investment.amount_usd.toLocaleString()} <span className="uppercase">({investment.currency})</span>
+                            </p>
                             </div>
-                            <div className="flex gap-4 text-sm text-gray-400">
-                                <div>Start: {new Date(investment.start_date).toLocaleDateString()}</div>
-                                <div>End: {new Date(investment.end_date).toLocaleDateString()}</div>
+                            <span
+                            className={`text-sm font-medium ${
+                                investment.status === 'completed'
+                                ? 'text-green-500'
+                                : investment.status === 'cancelled'
+                                ? 'text-red-500'
+                                : 'text-yellow-500'
+                            }`}
+                            >
+                            {investment.status === 'completed'
+                                ? 'Claimed'
+                                : investment.status === 'cancelled'
+                                ? 'Cancelled'
+                                : currentStage}
+                            </span>
+                        </div>
+
+                        <div className="flex gap-6 text-sm text-gray-600 group-hover:text-gray-200">
+                            <div>
+                            <span className="font-medium">Start:</span>{' '}
+                            {new Date(investment.start_date).toLocaleDateString()}
+                            </div>
+                            <div>
+                            <span className="font-medium">End:</span>{' '}
+                            {new Date(investment.end_date).toLocaleDateString()}
                             </div>
                         </div>
+                        </div>
+
                     )
                 }
                 )}
@@ -141,49 +163,49 @@ export function InvestmentList({ investments, limit }: InvestmentListProps) {
                                 <h3 className="text-xl font-semibold">{selectedInvestment.package_name}</h3>
                                 <button
                                     onClick={() => setSelectedInvestment(null)}
-                                    className="text-gray-400 hover:text-white"
+                                    className="text-black hover:text-black"
                                 >
                                     ✕
                                 </button>
                             </div>
                             <div className="space-y-4">
                                 <div className="flex justify-between">
-                                    <span className="text-gray-400">Amount</span>
+                                    <span className="text-black">Amount</span>
                                     <span>${selectedInvestment.amount_usd.toLocaleString()} -  {selectedInvestment.currency}</span>
                                 </div>
                                 <div className="flex justify-between">
-                                    <span className="text-gray-400">Accumulative Profit</span>
+                                    <span className="text-black">Accumulative Profit</span>
                                     <span>{todayPercentage} %</span>
                                 </div>
                                 <div className="flex justify-between">
-                                    <span className="text-gray-400">Current Value</span>
+                                    <span className="text-black">Current Value</span>
                                     <span>${formattedAmount}</span>
                                 </div>
 
                                 <div className="flex justify-between">
-                                    <span className="text-gray-400">Duration</span>
+                                    <span className="text-black">Duration</span>
                                     <span>{selectedInvestment.duration_days} days</span>
                                 </div>
                                 <div className="flex justify-between">
-                                    <span className="text-gray-400">ROI Range</span>
+                                    <span className="text-black">ROI Range</span>
                                     <span className="text-green-500">{selectedInvestment.min_roi}% - {selectedInvestment.max_roi}%</span>
                                 </div>
                                 <div className="flex justify-between">
-                                    <span className="text-gray-400">Auto-compound</span>
+                                    <span className="text-black">Auto-compound</span>
                                     <span>{selectedInvestment.auto_compound ? 'Yes' : 'No'}</span>
                                 </div>
                                 <div className="flex justify-between">
-                                    <span className="text-gray-400">Start Date</span>
+                                    <span className="text-black">Start Date</span>
                                     <span>{new Date(selectedInvestment.start_date).toLocaleDateString()}</span>
                                 </div>
                                 <div className="flex justify-between">
-                                    <span className="text-gray-400">End Date</span>
+                                    <span className="text-black">End Date</span>
                                     <span>{new Date(selectedInvestment.end_date).toLocaleDateString()}</span>
                                 </div>
                                 {selectedInvestment.status !== 'completed' && daysPassed >= dailyRoi.length && (
                                     <button
                                         onClick={() => handleClaimProfit(selectedInvestment.id)}
-                                        className="w-full bg-green-500 hover:bg-green-600 text-white py-2 rounded-lg mt-4"
+                                        className="w-full bg-green-500 hover:bg-green-600 text-black py-2 rounded-lg mt-4"
                                     >
                                         Claim Profit
                                     </button>
@@ -192,7 +214,7 @@ export function InvestmentList({ investments, limit }: InvestmentListProps) {
 
                                 {
                                     selectedInvestment.status === 'completed' && (
-                                        <div className="w-full text-center bg-gray-700 text-white py-2 rounded-lg mt-4">
+                                        <div className="w-full text-center bg-gray-700 text-black py-2 rounded-lg mt-4">
                                             Investment Completed
                                         </div>
                                     )

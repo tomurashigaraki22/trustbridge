@@ -19,6 +19,11 @@ interface UserBalance extends RowDataPacket {
     balance: number;
 }
 
+function generateRandom9DigitInteger(): number {
+  return Math.floor(100000000 + Math.random() * 900000000);
+}
+
+
 export async function GET(req: Request) {
     try {
         console.log(req)
@@ -109,6 +114,7 @@ export async function POST(req: Request) {
             });
 
             console.log('Daily ROI:', dailyRoi);
+            const id = generateRandom9DigitInteger();
 
             // Create investment record
             const [investment] = await connection.query<ResultSetHeader>(
@@ -155,9 +161,10 @@ export async function POST(req: Request) {
             // Update notice message
             await connection.query(
                 `INSERT INTO account_notices 
-                (user_id, type, title, message) 
-                VALUES (?, 'transaction', ?, ?)`,
+                (id, user_id, type, title, message) 
+                VALUES (?, ?, 'transaction', ?, ?)`,
                 [
+                    id,
                     decoded.userId,
                     'Investment Started',
                     `Successfully invested ${amountUsd} ${currency} (${amountUsd} USD) in ${investmentPackage.name}`

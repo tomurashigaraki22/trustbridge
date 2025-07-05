@@ -48,7 +48,7 @@ export default function Login() {
                 )}
 
                 <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1.5">
+                    <label className="block text-sm font-medium text-black mb-1.5">
                         Email address
                     </label>
                     <Input
@@ -56,22 +56,26 @@ export default function Login() {
                         name="email"
                         value={formData.email}
                         onChange={handleChange}
+                        className="text-black"
                         placeholder="Enter your email"
                         required
+                        style={{ color: 'black'}}
                     />
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1.5">
+                    <label className="block text-sm font-medium text-black mb-1.5">
                         Password
                     </label>
                     <Input
                         type="password"
+                        className="text-black"
                         name="password"
                         value={formData.password}
                         onChange={handleChange}
                         placeholder="Enter your password"
                         required
+                        style={{ color: 'black'}}
                     />
                 </div>
 

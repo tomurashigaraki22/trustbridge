@@ -44,7 +44,7 @@ export async function GET(
             return NextResponse.json({ error: "Unauthorized" }, { status: 403 })
         }
 
-        const userId = params.id
+        const userId = await params.id
 
         const connection = await pool.getConnection()
         try {

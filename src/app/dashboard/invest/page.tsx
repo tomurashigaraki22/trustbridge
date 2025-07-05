@@ -245,7 +245,7 @@ export default function InvestPage() {
     }
 
     return (
-        <div className="min-h-screen bg-[#0A0E1C] text-white pb-[5rem]">
+        <div className="min-h-screen bg-white text-white pb-[5rem]">
             <div className="flex flex-col lg:flex-row">
                 <Sidebar />
                 <div className="flex-1 ">
@@ -270,74 +270,86 @@ export default function InvestPage() {
                                 <div className="col-span-full text-center text-red-500 py-8">{error}</div>
                             ) : (
                                 investmentPackages.map((pkg) => (
-                                    <div key={pkg.id} className="bg-[#000] rounded-[1rem] p-6 relative overflow-hidden">
-                                        {pkg.risk_level === "low" && (
-                                            <div className="absolute top-4 right-4 bg-green-500/20 text-green-500 px-3 py-1 rounded-full text-sm">
-                                                Recommended
-                                            </div>
-                                        )}
-
-                                        <h3 className="text-xl font-semibold mb-2">{pkg.name}</h3>
-                                        <p className="text-gray-400 text-sm mb-4">{pkg.description}</p>
-
-                                        <div className="space-y-3 mb-6">
-                                            <div className="flex justify-between">
-                                                <span className="text-gray-400">Min Amount</span>
-                                                <span>${pkg.min_amount_usd.toLocaleString("en-US", { minimumFractionDigits: 2 })}</span>
-                                            </div>
-                                            <div className="flex justify-between">
-                                                <span className="text-gray-400">Max Amount</span>
-                                                <span>${pkg.max_amount_usd.toLocaleString("en-US", { minimumFractionDigits: 2 })}</span>
-                                            </div>
-                                            <div className="flex justify-between">
-                                                <span className="text-gray-400">Duration</span>
-                                                <span>{pkg.duration_days} days</span>
-                                            </div>
-                                            <div className="flex justify-between">
-                                                <span className="text-gray-400">Expected ROI</span>
-                                                <span className="text-green-500">
-                                                    {pkg.min_roi}% - {pkg.max_roi}%
-                                                </span>
-                                            </div>
-                                            <div className="flex justify-between">
-                                                <span className="text-gray-400">Risk Level</span>
-                                                <span
-                                                    className={`
-                            ${pkg.risk_level === "low" ? "text-green-500" : ""}
-                            ${pkg.risk_level === "medium" ? "text-yellow-500" : ""}
-                            ${pkg.risk_level === "high" ? "text-red-500" : ""}
-                          `}
-                                                >
-                                                    {pkg.risk_level}
-                                                </span>
-                                            </div>
+                                    <div
+                                    key={pkg.id}
+                                    className="bg-white border border-gray-200 rounded-[1rem] p-6 relative shadow-sm hover:shadow-md transition-all"
+                                    >
+                                    {pkg.risk_level === "low" && (
+                                        <div className="absolute top-4 right-4 bg-green-100 text-green-600 px-3 py-1 rounded-full text-sm font-medium">
+                                        Recommended
                                         </div>
+                                    )}
 
-                                        <div className="mb-6">
-                                            <h4 className="text-sm font-medium mb-2">Features:</h4>
-                                            <ul className="space-y-2">
-                                                {pkg.features.map((feature, index) => (
-                                                    <li key={index} className="text-sm text-gray-400 flex items-center gap-2">
-                                                        <div className="w-1.5 h-1.5 rounded-full bg-orange-500" />
-                                                        {feature}
-                                                    </li>
-                                                ))}
-                                            </ul>
+                                    <h3 className="text-xl font-semibold text-gray-800 mb-2">{pkg.name}</h3>
+                                    <p className="text-gray-500 text-sm mb-4">{pkg.description}</p>
+
+                                    <div className="space-y-3 mb-6">
+                                        <div className="flex justify-between text-sm">
+                                        <span className="text-gray-500">Min Amount</span>
+                                        <span className="text-gray-800">
+                                            ${pkg.min_amount_usd.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                                        </span>
                                         </div>
-
-                                        <button
-                                            onClick={() => handleInvest(pkg)}
-                                            className="w-full bg-orange-500 hover:bg-orange-600 py-3 rounded-lg font-medium"
+                                        <div className="flex justify-between text-sm">
+                                        <span className="text-gray-500">Max Amount</span>
+                                        <span className="text-gray-800">
+                                            ${pkg.max_amount_usd.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                                        </span>
+                                        </div>
+                                        <div className="flex justify-between text-sm">
+                                        <span className="text-gray-500">Duration</span>
+                                        <span className="text-gray-800">{pkg.duration_days} days</span>
+                                        </div>
+                                        <div className="flex justify-between text-sm">
+                                        <span className="text-gray-500">Expected ROI</span>
+                                        <span className="text-green-600 font-medium">
+                                            {pkg.min_roi}% - {pkg.max_roi}%
+                                        </span>
+                                        </div>
+                                        <div className="flex justify-between text-sm">
+                                        <span className="text-gray-500">Risk Level</span>
+                                        <span
+                                            className={`
+                                            font-medium
+                                            ${pkg.risk_level === "low" ? "text-green-600" : ""}
+                                            ${pkg.risk_level === "medium" ? "text-yellow-500" : ""}
+                                            ${pkg.risk_level === "high" ? "text-red-500" : ""}
+                                            `}
                                         >
-                                            Invest Now
-                                        </button>
+                                            {pkg.risk_level}
+                                        </span>
+                                        </div>
                                     </div>
+
+                                    <div className="mb-6">
+                                        <h4 className="text-sm font-semibold text-gray-700 mb-2">Features:</h4>
+                                        <ul className="space-y-2">
+                                        {pkg.features.map((feature, index) => (
+                                            <li
+                                            key={index}
+                                            className="text-sm text-gray-600 flex items-center gap-2"
+                                            >
+                                            <div className="w-1.5 h-1.5 rounded-full bg-orange-500" />
+                                            {feature}
+                                            </li>
+                                        ))}
+                                        </ul>
+                                    </div>
+
+                                    <button
+                                        onClick={() => handleInvest(pkg)}
+                                        className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-lg font-medium transition-colors"
+                                    >
+                                        Invest Now
+                                    </button>
+                                    </div>
+
                                 ))
                             )}
                         </div>
-                        <div className="bg-[#121212] rounded-[1rem] p-6 mb-6">
-                            <div className="flex justify-between items-center mb-4">
-                                <h2 className="text-xl font-semibold">Recent Investments</h2>
+                        <div className="bg-[#ffffff] rounded-[1rem] p-6 mb-6">
+                            <div className="flex justify-between items-center mb-4 border-b-2 border-gray-200 pb-4">
+                                <h2 className="text-xl text-black font-semibold">Recent Investments</h2>
                                 <button
                                     onClick={() => router.push('/dashboard/investments')}
                                     className="text-orange-500 hover:text-orange-600"

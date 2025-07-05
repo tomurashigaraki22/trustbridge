@@ -51,7 +51,7 @@ export default function TradingHistoryPage() {
     if (error) return <div>{error}</div>
 
     return (
-        <div className="min-h-screen bg-[#0A0E1C] text-white pb-[5rem]">
+        <div className="min-h-screen bg-white text-white pb-[5rem]">
             <div className="flex flex-col lg:flex-row">
                 <Sidebar />
                 <div className="flex-1 ">

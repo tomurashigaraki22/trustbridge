@@ -5,13 +5,16 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
     try {
         const { currency, amount } = await req.json();
         
+        // Extract id from params (await it as required in Next.js 15)
+        const { id } = await params;
+        
         // Convert currency to database column name
         const columnName = `${currency.toLowerCase()}_balance`;
         
         // Update the specific currency balance
         await pool.query(
             `UPDATE users SET ${columnName} = ? WHERE id = ?`,
-            [amount, params.id]
+            [amount, id]
         );
 
        

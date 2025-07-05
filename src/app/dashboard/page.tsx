@@ -34,6 +34,7 @@ export default function DashboardPage() {
         if (userData?.user?.otp_status == 'pending') {
           router.push("/dashboard/otp")
         }
+        console.log("USSS: ", userData?.user)
 
       }
     }, [userData?.user]
@@ -95,6 +96,7 @@ export default function DashboardPage() {
 
   const fetchBtcBalance = () => {
     const btcValue = calculateUserAssetValue(totalBalance, "bitcoin")
+    console.log("BTC VALUE: ", btcValue)
 
     setBtcValue(btcValue && Number((totalBalance / btcValue).toFixed(6)))
 
@@ -149,7 +151,7 @@ export default function DashboardPage() {
 
 
   return (
-    <div className="min-h-screen bg-[#0A0E1C] text-white">
+    <div className="min-h-screen bg-white text-white">
       <div className="flex flex-col lg:flex-row">
         <Sidebar />
         <div className="flex-1">
@@ -159,13 +161,14 @@ export default function DashboardPage() {
           <div className="p-4 ">
             {/* Account Balance Card */}
 
-            <div className="bg-[#1E1E1E] rounded-2xl md:p-6 shadow-md border border-[#2a2a2a]">
+            <div className="rounded-2xl md:p-6 shadow-md border border-gray-200 bg-white">
+  {/* Account Balance */}
   <div className="px-6 pt-6 pb-4">
     <div className="flex flex-col gap-2">
-      <div className="text-sm font-medium text-gray-400 tracking-wide">ACCOUNT BALANCE</div>
-      <div className="text-3xl font-bold text-white">
+      <div className="text-sm text-black tracking-wide font-bold">ACCOUNT BALANCE</div>
+      <div className="text-3xl md:text-4xl font-bold text-green-500">
         {isLoading ? (
-          <div className="h-8 w-48 animate-pulse rounded-md bg-gray-700/50" />
+          <div className="h-8 w-48 animate-pulse rounded-md bg-gray-300" />
         ) : (
           showBalance
             ? `${totalBalance.toLocaleString("en-US", { style: "currency", currency: "USD" })}`
@@ -175,63 +178,69 @@ export default function DashboardPage() {
     </div>
   </div>
 
-              {/* Account Stats Grid */}
-              <div className="grid md:grid-cols-2 gap-4 mb-6 p-[1rem]">
-                <div className="bg-[#383838] rounded-[1rem] p-6">
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-gray-400 text-sm">TOTAL DEPOSIT</span>
-                    <CircleDollarSign className="h-6 w-6 text-gray-400" />
-                  </div>
-                  <div className="text-xl font-bold">
-                    ${(userData?.user?.total_deposit.toLocaleString("en-US", { style: "currency", currency: "USD" }) || 0)}
-                  </div>
-                </div>
+  {/* Account Stats Grid */}
+  <div className="grid md:grid-cols-2 gap-4 mb-6 p-[1rem]">
+    {/* Deposit */}
+    <div className="bg-white rounded-[1rem] p-6 shadow-sm border border-gray-200">
+      <div className="flex justify-between items-center mb-2">
+        <span className="text-gray-600 text-sm">TOTAL DEPOSIT</span>
+        <CircleDollarSign className="h-6 w-6 text-green-500" />
+      </div>
+      <div className="text-xl md:text-2xl font-semibold text-gray-800">
+        ${(userData?.user?.total_deposit.toLocaleString("en-US", { style: "currency", currency: "USD" }) || 0)}
+      </div>
+    </div>
 
-                <div className="bg-[#383838] rounded-[1rem] p-6">
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-gray-400 text-sm">TOTAL PROFIT</span>
-                    <Sprout className="h-6 w-6 text-gray-400" />
-                  </div>
-                  <div className="text-xl font-bold">
-                    ${(userData?.user?.total_profit.toLocaleString("en-US", { style: "currency", currency: "USD" }) || 0)}
-                  </div>
-                </div>
+    {/* Profit */}
+    {/* <div className="bg-white rounded-[1rem] p-6 shadow-sm border border-gray-200">
+      <div className="flex justify-between items-center mb-2">
+        <span className="text-gray-600 text-sm">TOTAL PROFIT</span>
+        <Sprout className="h-6 w-6 text-blue-500" />
+      </div>
+      <div className="text-xl md:text-2xl font-semibold text-gray-800">
+        ${(userData?.user?.total_profit.toLocaleString("en-US", { style: "currency", currency: "USD" }) || 0)}
+      </div>
+    </div> */}
 
-                <div className="bg-[#383838] rounded-[1rem] p-6">
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-gray-400 text-sm">TOTAL BONUS</span>
-                    <Gift className="h-6 w-6 text-gray-400" />
-                  </div>
-                  <div className="text-xl font-bold">
-                    ${(userData?.user?.usdt_balance.toLocaleString("en-US", { style: "currency", currency: "USD" }) || 0)}
-                  </div>
-                </div>
+    {/* Bonus */}
+    <div className="bg-white rounded-[1rem] p-6 shadow-sm border border-gray-200">
+      <div className="flex justify-between items-center mb-2">
+        <span className="text-gray-600 text-sm">TOTAL PROFIT</span>
+        <Gift className="h-6 w-6 text-yellow-500" />
+      </div>
+      <div className="text-xl md:text-2xl font-semibold text-gray-800">
+        ${(userData?.user?.usdt_balance.toLocaleString("en-US", { style: "currency", currency: "USD" }) || 0)}
+      </div>
+    </div>
 
-                <div className="bg-[#383838] rounded-[1rem] p-6">
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-gray-400 text-sm">WITHDRAWALS</span>
-                    <Wallet className="h-6 w-6 text-gray-400" />
-                  </div>
-                  <div className="text-xl font-bold">
-                    ${(userData?.user?.total_withdrawals.toLocaleString("en-US", { style: "currency", currency: "USD" }) || 0)}
-                  </div>
-                </div>
-              </div>
-            </div>
-            {/* Recent Transactions */}
-            <div className="bg-[#1E1E1E] rounded-[1rem] mt-5  p-6">
+    {/* Withdrawals */}
+    <div className="bg-white rounded-[1rem] p-6 shadow-sm border border-gray-200">
+      <div className="flex justify-between items-center mb-2">
+        <span className="text-gray-600 text-sm">WITHDRAWALS</span>
+        <Wallet className="h-6 w-6 text-black" />
+      </div>
+      <div className="text-xl md:text-2xl font-semibold text-gray-800">
+        ${(userData?.user?.total_withdrawals.toLocaleString("en-US", { style: "currency", currency: "USD" }) || 0)}
+      </div>
+    </div>
+  </div>
+</div>
+
+{/* Recent Transactions */}
+<div className="bg-white rounded-[1rem] mt-5 p-6 shadow-md border border-gray-200">
+  <div className="flex justify-between items-center mb-4">
+    <h2 className="text-lg font-semibold text-gray-900">Recent Transactions</h2>
+    <Link href="/dashboard/transactions" className="text-sm text-blue-500 hover:underline">
+      View All
+    </Link>
+  </div>
+  <TransactionList transactions={userData?.transactions || []} number={5} />
+</div>
+
+
+            <div className="bg-white rounded-[1rem] mt-5  p-6">
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-medium">Recent Transactions</h2>
-                <Link href="/dashboard/transactions" className="text-sm text-gray-400">
-                  View All
-                </Link>
-              </div>
-              <TransactionList transactions={userData?.transactions || []} number={5} />
-            </div>
-
-            <div className="bg-[#1E1E1E] rounded-[1rem] mt-5  p-6">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-medium">Active Investments</h2>
+                <h2 className="text-lg text-black font-medium">Active Investments</h2>
                 <Link href="/dashboard/investments" className="text-sm text-gray-400">
                   View All
                 </Link>

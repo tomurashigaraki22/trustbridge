@@ -116,6 +116,7 @@ export async function GET() {
             WHERE user_id = ?
         `, [decoded.userId]);
 
+
         // Get regular transactions list
         const [transactions] = await pool.query<Transaction[]>(
             `SELECT * FROM transactions WHERE user_id = ? ORDER BY id DESC`,
@@ -146,6 +147,7 @@ export async function GET() {
        FROM wallet_addresses `,
             []
         );
+
 
 
         return NextResponse.json({

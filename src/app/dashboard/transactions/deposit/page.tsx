@@ -76,7 +76,6 @@ export default function DepositPage({ searchParams }: { searchParams: Promise<{ 
     useEffect(() => {
         if (userData) {
             const options = generateCryptoOptions(userData)
-            console.log(options)
             setCryptoOptions(options)
         }
     }, [userData])
@@ -86,7 +85,6 @@ export default function DepositPage({ searchParams }: { searchParams: Promise<{ 
 
     useEffect(() => {
         if (cryptoOptions.length > 0) {
-            console.log(cryptoOptions)
             const initialCrypto = cryptoOptions.find(c => c.symbol === resolvedParams.symbol) || cryptoOptions[0]
             setSelectedCrypto(initialCrypto)
         }
@@ -100,16 +98,11 @@ export default function DepositPage({ searchParams }: { searchParams: Promise<{ 
         }
     }
 
-    // Add isSubmitting state
     const [isSubmitting, setIsSubmitting] = useState(false);
-
-    // Add amount state
     const [amount, setAmount] = useState("");
 
     const handleConfirmDeposit = async () => {
-        if (!amount) {
-             return;
-        }
+        if (!amount) return;
 
         try {
             setIsSubmitting(true);
@@ -128,9 +121,7 @@ export default function DepositPage({ searchParams }: { searchParams: Promise<{ 
             });
 
             const data = await response.json();
-            if (!response.ok) {
-                throw new Error(data.error || 'Failed to create deposit');
-            }
+            if (!response.ok) throw new Error(data.error || 'Failed to create deposit');
 
             await refetch();
             router.push(`/dashboard/transactions/success?amount=${amount}&symbol=${selectedCrypto?.symbol}&type=deposit`);
@@ -141,20 +132,19 @@ export default function DepositPage({ searchParams }: { searchParams: Promise<{ 
         }
     }
 
-
     return (
-        <div className="min-h-screen bg-[#0A0E1C] text-white pb-[5rem]">
+        <div className="min-h-screen bg-gray-50 text-gray-800 pb-[5rem]">
             <div className="flex flex-col lg:flex-row">
                 <Sidebar />
-                <div className="flex-1 ">
+                <div className="flex-1">
                     <TopBar title="Deposit" />
                     {isLoading || !selectedCrypto ? (
-                        <div>Loading...</div>
+                        <div className="p-8 text-center text-gray-500">Loading...</div>
                     ) : (
                         <div className="p-4 lg:p-8 max-w-6xl mx-auto">
-                            <div className="bg-[#121212] rounded-[1rem] p-6">
+                            <div className="bg-white shadow-lg rounded-xl p-6 border border-gray-200">
                                 <div className="flex items-center justify-between mb-6">
-                                    <h2 className="text-lg font-bold">Deposit {selectedCrypto.name}</h2>
+                                    <h2 className="text-lg font-semibold">Deposit {selectedCrypto.name}</h2>
                                     <select
                                         value={selectedCrypto.symbol}
                                         onChange={(event) => {
@@ -162,7 +152,7 @@ export default function DepositPage({ searchParams }: { searchParams: Promise<{ 
                                             const crypto = cryptoOptions.find((c) => c.symbol === value);
                                             if (crypto) setSelectedCrypto(crypto);
                                         }}
-                                        className="bg-[#1A1A1A] text-white px-3 py-2 rounded-lg"
+                                        className="bg-gray-100 text-gray-800 border border-gray-300 px-3 py-2 rounded-lg"
                                     >
                                         {cryptoOptions.map((crypto) => (
                                             <option key={crypto.symbol} value={crypto.symbol}>
@@ -174,7 +164,7 @@ export default function DepositPage({ searchParams }: { searchParams: Promise<{ 
 
                                 {!directDeposit && (
                                     <div className="flex justify-center mb-8">
-                                        <div className="bg-white p-4 rounded-lg">
+                                        <div className="bg-white p-4 rounded-lg border border-gray-200">
                                             <QRCode
                                                 value={selectedCrypto.address}
                                                 size={200}
@@ -185,48 +175,48 @@ export default function DepositPage({ searchParams }: { searchParams: Promise<{ 
                                 )}
 
                                 <div className="space-y-4">
-                                    <div className="bg-[#1A1A1A] p-4 rounded-lg">
-                                        <div className="text-sm text-gray-400 mb-2">Wallet Address</div>
+                                    <div className="bg-gray-100 p-4 rounded-lg border border-gray-200">
+                                        <div className="text-sm text-gray-500 mb-2">Wallet Address</div>
                                         {directDeposit ? (
-                                            <div className="font-medium">PLEASE CONTACT ADMIN FOR DEPOSIT WALLET</div>
+                                            <div className="font-medium text-red-600">PLEASE CONTACT ADMIN FOR DEPOSIT WALLET</div>
                                         ) : (
                                             <div className="flex items-center justify-between gap-4">
                                                 <div className="font-mono text-sm break-all">{selectedCrypto.address}</div>
                                                 <button
                                                     onClick={copyToClipboard}
-                                                    className="shrink-0 p-2 hover:bg-white/5 rounded-lg transition-colors"
+                                                    className="shrink-0 p-2 hover:bg-gray-200 rounded-lg transition-colors"
                                                 >
-                                                    <Copy size={20} className={copied ? "text-green-500" : "text-gray-400"} />
+                                                    <Copy size={20} className={copied ? "text-green-500" : "text-gray-500"} />
                                                 </button>
                                             </div>
                                         )}
                                     </div>
 
-                                    <div className="bg-[#1A1A1A] p-4 rounded-lg">
-                                        <div className="text-sm text-gray-400 mb-2">Network</div>
+                                    <div className="bg-gray-100 p-4 rounded-lg border border-gray-200">
+                                        <div className="text-sm text-gray-500 mb-2">Network</div>
                                         <div className="font-medium">{selectedCrypto.name} Network ({selectedCrypto.symbol})</div>
                                     </div>
 
-                                     <div className="bg-[#1A1A1A] p-4 rounded-lg">
-                                        <div className="text-sm text-gray-400 mb-2">Amount (USD)</div>
+                                    <div className="bg-gray-100 p-4 rounded-lg border border-gray-200">
+                                        <div className="text-sm text-gray-500 mb-2">Amount (USD)</div>
                                         <input
                                             type="number"
                                             value={amount}
                                             onChange={(e) => setAmount(e.target.value)}
                                             placeholder={`Enter ${selectedCrypto?.symbol} amount in USD`}
-                                            className="w-full bg-[#242424] text-white px-3 py-2 rounded-lg"
+                                            className="w-full bg-white text-gray-800 border border-gray-300 px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400"
                                             required
                                         />
                                     </div>
 
-                                    <div className="bg-orange-500/20 text-orange-500 p-4 rounded-lg text-sm">
+                                    <div className="bg-orange-100 text-orange-700 p-4 rounded-lg text-sm border border-orange-300">
                                         Only send {selectedCrypto.symbol} to this address. Sending any other asset may result in permanent loss.
                                     </div>
 
                                     <button
                                         onClick={handleConfirmDeposit}
                                         disabled={isSubmitting}
-                                        className="w-full bg-orange-500 hover:bg-orange-600 py-3 rounded-lg font-medium transition-colors mt-6"
+                                        className="w-full bg-orange-500 hover:bg-orange-600 py-3 rounded-lg font-medium text-white transition-colors mt-6"
                                     >
                                         {isSubmitting ? "Processing..." : `I Have Sent ${selectedCrypto?.symbol}`}
                                     </button>
