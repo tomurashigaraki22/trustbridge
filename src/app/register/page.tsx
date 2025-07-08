@@ -151,6 +151,7 @@ export default function Register() {
                             onChange={handleChange}
                             placeholder="Enter your first name"
                             required
+                            style={{ color: 'black'}}
                         />
                     </div>
 
@@ -165,6 +166,7 @@ export default function Register() {
                             onChange={handleChange}
                             placeholder="Enter your last name"
                             required
+                            style={{ color: 'black'}}
                         />
                     </div>
                 </div>
@@ -180,6 +182,7 @@ export default function Register() {
                         onChange={handleChange}
                         placeholder="Enter your email"
                         required
+                        style={{ color: 'black'}}
                     />
                 </div>
 
@@ -194,6 +197,7 @@ export default function Register() {
                         onChange={handleChange}
                         placeholder="Enter your phone number"
                         required
+                        style={{ color: 'black'}}
                     />
                 </div>
 
@@ -207,6 +211,7 @@ export default function Register() {
                         onChange={(e) => handleChange(e as any)}
                         className="w-full bg-[#1A1A1A] text-white rounded-lg p-3 border border-gray-800 focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
                         required
+                        style={{ color: 'black'}}
                     >
                         <option value="">Select your country</option>
                         {countriesData.countries.map((country) => (
@@ -228,6 +233,7 @@ export default function Register() {
                         onChange={handleChange}
                         placeholder="Create a password"
                         required
+                        style={{ color: 'black'}}
                     />
                 </div>
 
@@ -242,6 +248,7 @@ export default function Register() {
                         onChange={handleChange}
                         placeholder="Confirm your password"
                         required
+                        style={{ color: 'black'}}
                     />
                 </div>
 
