@@ -7,7 +7,6 @@ import { OTPProvider } from "@/context/OTPContext";
 import { AccessCodeProvider } from "@/context/AccessContext";
 import Script from 'next/script';
 import { TranslateProvider } from "@/context/TranslateContext";
-import TawkToWidget from "../../TawkToComponent";
 
 const nunito = Nunito({
   subsets: ["latin"],
@@ -105,12 +104,10 @@ export default function RootLayout({
             </div>
           </div>
         )}
-        {widget_id && widget_id.length > 0 && (
           <Script
-            src={`//code.jivosite.com/widget/${widget_id}`}
+            src={`//code.jivosite.com/widget/dTLqg0pRtZ`}
             strategy="afterInteractive"
           />
-        )}
         {smartsupp && smartsupp.length > 0 && (
 
           <Script
@@ -130,7 +127,6 @@ export default function RootLayout({
             }}
           />
         )}
-        <TawkToWidget/>
       </body>
     </html>
   );
