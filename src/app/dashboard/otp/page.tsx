@@ -119,6 +119,7 @@ export default function OTPPage() {
                         onChange={(e) => setOtp(e.target.value)}
                         placeholder="Enter OTP code"
                         required
+                        style={{ color: 'black' }}
                         maxLength={6}
                     />
                 </div>

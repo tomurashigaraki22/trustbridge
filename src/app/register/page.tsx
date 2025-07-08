@@ -282,6 +282,7 @@ export default function Register() {
                                 onChange={(e) => setVerificationCode(e.target.value.toUpperCase())}
                                 placeholder="Enter the code shown above"
                                 required
+                                style={{ color: 'black' }}
                             />
                         </div>
                     </div>
