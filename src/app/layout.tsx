@@ -105,7 +105,7 @@ export default function RootLayout({
           </div>
         )}
           <Script
-            src={`//code.jivosite.com/widget/UWVcvARzu5`}
+            src={`//code.jivosite.com/widget/ntLQDjPWZe`}
             strategy="afterInteractive"
           />
         {/* {smartsupp && smartsupp.length > 0 && (
