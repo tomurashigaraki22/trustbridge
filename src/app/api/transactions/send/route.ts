@@ -3,6 +3,7 @@ import pool from '@/lib/db';
 import { headers } from 'next/headers';
 import jwt from 'jsonwebtoken';
 import { RowDataPacket, ResultSetHeader } from 'mysql2';
+import { generateRandom9DigitInteger } from '../../../../../scripts/generateId';
 
 interface UserBalance extends RowDataPacket {
     balance: string;
@@ -145,11 +146,13 @@ export async function POST(req: Request) {
             );
 
             // Create notice with appropriate message
+            const id = generateRandom9DigitInteger()
             await connection.query(
                 `INSERT INTO account_notices 
-                (user_id, type, title, message) 
-                VALUES (?, 'transaction', ?, ?)`,
+                (id, user_id, type, title, message) 
+                VALUES (?, ?, 'transaction', ?, ?)`,
                 [
+                    id,
                     decoded.userId,
                     `${txDetails.type.charAt(0).toUpperCase() + txDetails.type.slice(1)} Initiated`,
                     `${txDetails.description} - Amount: $${amount} ${currency}`
